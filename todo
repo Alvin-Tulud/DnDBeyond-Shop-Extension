@@ -1,0 +1,8 @@
+fix darkmode for all dropdown lists 
+- add from SRD Catalog > filter types
+rename all assets 
+remove hidden shop as functionality is not as intended and is also kinda useless
+- original function was for hidden / obscured items in a shop
+need to populate srd-items.json with more / all items
+need real icons (ask joos)
+tie the bundle export to a button as listed in README (known simplifications in this pass)
