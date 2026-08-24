@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Shop Keeper</title>
+<link rel="stylesheet" href="css/tailwind-output.css" />
+<link rel="stylesheet" href="css/app.css" />
+</head>
+<body class="w-[420px] h-[600px] bg-beyond-parchment dark:bg-beyond-ink text-beyond-ink dark:text-beyond-parchment flex flex-col overflow-hidden">
+
+  <!-- App shell -->
+  <div id="app" class="flex flex-col h-full">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between px-3 py-2 border-b border-black/10 dark:border-white/10 bg-beyond-red text-beyond-parchment shrink-0">
+      <div class="flex items-center gap-2">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="20" height="20" rx="4" fill="#D4AF37"/>
+          <path d="M10 2 L13 7 H7 Z" fill="#8B0000"/>
+          <rect x="5" y="8" width="10" height="3" fill="#8B0000"/>
+        </svg>
+        <span class="font-display font-bold tracking-wide text-sm">Shop Keeper</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button id="roleToggleBtn" class="text-xs font-semibold px-2 py-1 rounded-md bg-white/15 hover:bg-white/25 transition-colors" title="Toggle Dungeon Master mode">
+          <span id="roleLabel">User</span>
+        </button>
+        <button id="themeToggleBtn" class="btn-icon !text-beyond-parchment" title="Toggle light/dark mode" aria-label="Toggle theme">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Primary nav (view switch) -->
+    <nav class="flex shrink-0 border-b border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 text-sm">
+      <button data-view="regular" class="nav-tab flex-1 py-2 font-semibold border-b-2 border-beyond-red text-beyond-red dark:text-beyond-gold dark:border-beyond-gold">Browse Shops</button>
+      <button data-view="creation" id="creationNavBtn" class="nav-tab flex-1 py-2 font-semibold border-b-2 border-transparent text-beyond-ink/60 dark:text-beyond-parchment/60 hidden">Create Shop</button>
+    </nav>
+
+    <!-- ===================== REGULAR (PLAYER) VIEW ===================== -->
+    <section id="view-regular" class="flex-1 flex flex-col overflow-hidden">
+
+      <!-- Upload row -->
+      <div class="flex items-center gap-2 px-3 py-2 shrink-0 border-b border-black/5 dark:border-white/5">
+        <label class="btn-secondary cursor-pointer !py-1 flex items-center gap-1">
+          📂 Import Shop(s)
+          <input type="file" id="uploadInput" accept="application/json" multiple class="hidden" />
+        </label>
+        <button id="hiddenShopsBtn" class="btn-icon text-xs" title="View hidden shops">🙈 Hidden (<span id="hiddenCount">0</span>)</button>
+      </div>
+
+      <!-- Tab bar -->
+      <div id="shopTabBar" class="flex gap-1 px-3 pt-2 overflow-x-auto shrink-0" role="tablist"></div>
+
+      <!-- Search/filter/sort for active shop -->
+      <div id="regularToolbar" class="hidden flex items-center gap-2 px-3 py-2 border-t border-b border-black/10 dark:border-white/10 shrink-0">
+        <input id="regularSearch" type="search" placeholder="Search items…" class="field-input flex-1" />
+        <select id="regularRarityFilter" class="field-input w-28 shrink-0">
+          <option value="">All rarities</option>
+        </select>
+        <select id="regularSort" class="field-input w-32 shrink-0">
+          <option value="name-asc">Name A–Z</option>
+          <option value="name-desc">Name Z–A</option>
+          <option value="cost-asc">Cost: low–high</option>
+          <option value="cost-desc">Cost: high–low</option>
+        </select>
+      </div>
+
+      <!-- Active shop title -->
+      <div id="regularShopHeader" class="hidden px-3 pt-2 shrink-0">
+        <h2 id="regularShopTitle" class="font-display font-bold text-lg leading-tight"></h2>
+        <p id="regularShopMeta" class="text-xs opacity-60"></p>
+      </div>
+
+      <!-- Item list (virtualized) -->
+      <div id="regularItemList" class="flex-1 overflow-y-auto px-3 py-2 space-y-2"></div>
+
+      <!-- Empty state -->
+      <div id="regularEmptyState" class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-2 opacity-70">
+        <span class="text-4xl">📦</span>
+        <p id="regularEmptyText" class="text-sm font-medium">No shop loaded yet. Import a shop JSON file from your DM to get started.</p>
+      </div>
+    </section>
+
+    <!-- ===================== CREATION VIEW (DM ONLY) ===================== -->
+    <section id="view-creation" class="flex-1 flex-col overflow-hidden hidden">
+
+      <div class="px-3 py-2 border-b border-black/5 dark:border-white/5 shrink-0 space-y-2">
+        <input id="creationTitleInput" type="text" placeholder="Shop title (e.g. Ye Olde Shoppe)" class="field-input font-display font-bold" />
+        <div class="flex items-center gap-2">
+          <button id="openItemPickerBtn" class="btn-primary">➕ Add from Catalog</button>
+          <button id="openCustomItemBtn" class="btn-secondary">✎ Custom Item</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="exportShopBtn" class="btn-secondary flex-1">⬇ Export Shop JSON</button>
+          <label class="btn-secondary flex-1 text-center cursor-pointer">
+            ⬆ Import to Edit
+            <input type="file" id="creationImportInput" accept="application/json" class="hidden" />
+          </label>
+        </div>
+      </div>
+
+      <div id="creationItemList" class="flex-1 overflow-y-auto px-3 py-2 space-y-2"></div>
+
+      <div id="creationEmptyState" class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-2 opacity-70">
+        <span class="text-4xl">🛒</span>
+        <p class="text-sm font-medium">No items yet. Add items from the SRD catalog or create a custom item.</p>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <footer class="shrink-0 px-3 py-1.5 border-t border-black/10 dark:border-white/10 text-center">
+      <p class="text-[10px] leading-tight opacity-50">Unofficial fan-made tool. Not affiliated with, endorsed, or sponsored by D&amp;D Beyond, Wizards of the Coast, or Hasbro. SRD content used under CC-BY-4.0.</p>
+    </footer>
+  </div>
+
+  <!-- ===================== MODALS ===================== -->
+
+  <!-- Item picker modal (SRD catalog search) -->
+  <div id="itemPickerModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-display font-bold">Add from SRD Catalog</h3>
+        <button class="modal-close-btn" data-close="itemPickerModal">✕</button>
+      </div>
+      <div class="flex gap-2 mb-2">
+        <input id="catalogSearch" type="search" placeholder="Search catalog…" class="field-input flex-1" />
+        <select id="catalogTypeFilter" class="field-input w-32">
+          <option value="">All types</option>
+        </select>
+      </div>
+      <div id="catalogLoading" class="text-xs opacity-60 py-2 hidden">Loading catalog…</div>
+      <div id="catalogResults" class="flex-1 overflow-y-auto space-y-1.5" style="max-height: 360px;"></div>
+      <div id="catalogEmpty" class="text-xs opacity-60 py-4 text-center hidden">No matching items.</div>
+    </div>
+  </div>
+
+  <!-- Custom item modal -->
+  <div id="customItemModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-display font-bold" id="customItemModalTitle">Custom Item</h3>
+        <button class="modal-close-btn" data-close="customItemModal">✕</button>
+      </div>
+      <form id="customItemForm" class="space-y-2">
+        <input type="hidden" id="customItemEditId" value="" />
+        <div>
+          <label class="text-xs font-semibold opacity-70">Name *</label>
+          <input id="customItemName" required type="text" class="field-input" />
+        </div>
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <label class="text-xs font-semibold opacity-70">Rarity</label>
+            <select id="customItemRarity" class="field-input">
+              <option>Common</option>
+              <option>Uncommon</option>
+              <option>Rare</option>
+              <option>Very Rare</option>
+              <option>Legendary</option>
+              <option>Artifact</option>
+            </select>
+          </div>
+          <div class="flex-1">
+            <label class="text-xs font-semibold opacity-70">Quantity</label>
+            <input id="customItemQuantity" type="number" min="0" step="1" class="field-input" placeholder="optional" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold opacity-70">Description</label>
+          <textarea id="customItemDescription" rows="3" class="field-input resize-none"></textarea>
+        </div>
+        <div>
+          <label class="text-xs font-semibold opacity-70">Cost (optional)</label>
+          <div class="flex gap-1.5">
+            <input id="customItemCostGp" type="number" min="0" step="1" placeholder="gp" class="field-input" />
+            <input id="customItemCostSp" type="number" min="0" step="1" placeholder="sp" class="field-input" />
+            <input id="customItemCostCp" type="number" min="0" step="1" placeholder="cp" class="field-input" />
+          </div>
+        </div>
+        <div class="flex gap-2 pt-1">
+          <button type="submit" class="btn-primary flex-1">Save Item</button>
+          <button type="button" class="btn-secondary flex-1" data-close="customItemModal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Hidden shops modal -->
+  <div id="hiddenShopsModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-display font-bold">Hidden Shops</h3>
+        <button class="modal-close-btn" data-close="hiddenShopsModal">✕</button>
+      </div>
+      <div id="hiddenShopsList" class="space-y-1.5" style="max-height: 360px; overflow-y:auto;"></div>
+      <div id="hiddenShopsEmpty" class="text-xs opacity-60 py-4 text-center hidden">No hidden shops.</div>
+    </div>
+  </div>
+
+  <!-- Confirm dialog (generic) -->
+  <div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal-panel !max-w-[300px]">
+      <p id="confirmMessage" class="text-sm mb-3"></p>
+      <div class="flex gap-2">
+        <button id="confirmYesBtn" class="btn-primary flex-1">Confirm</button>
+        <button id="confirmNoBtn" class="btn-secondary flex-1">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toastContainer"></div>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/schema.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/attribution.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/ui-common.js"></script>
+  <script src="js/virtual-list.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/creation.js"></script>
+  <script src="js/regular.js"></script>
+  <script src="js/popup.js"></script>
+</body>
+</html>
