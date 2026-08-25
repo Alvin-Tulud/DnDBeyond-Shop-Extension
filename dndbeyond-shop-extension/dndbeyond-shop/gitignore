@@ -1,0 +1,35 @@
+# Dependencies (jquery/tailwindcss were installed locally only to produce
+# js/jquery.min.js and css/tailwind-output.css — the outputs are committed,
+# node_modules itself is not)
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Tailwind build inputs (if you keep tailwind.config.js / css/tailwind-input.css
+# in the repo for rebuilding — the compiled css/tailwind-output.css IS committed)
+# Uncomment below only if you regenerate the compiled CSS in CI instead of committing it:
+# css/tailwind-output.css
+
+# Build script scratch output (see scripts/fetch-srd.js)
+data/srd-items.raw.json
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Chrome extension packaging artifacts
+*.crx
+*.pem
+*.zip
+
+# Logs
+*.log
+
+# Local env / secrets (not currently used, but keep out of a public repo)
+.env
+.env.local
