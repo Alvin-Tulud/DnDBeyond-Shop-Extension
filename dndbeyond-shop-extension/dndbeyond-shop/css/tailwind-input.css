@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply font-body;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-beyond-red/40 rounded-full;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-beyond-red text-beyond-parchment font-semibold px-3 py-1.5 rounded-md text-sm hover:bg-beyond-crimson transition-colors disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-transparent border border-beyond-red/40 text-beyond-red dark:text-beyond-gold dark:border-beyond-gold/40 font-semibold px-3 py-1.5 rounded-md text-sm hover:bg-beyond-red/10 dark:hover:bg-beyond-gold/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-icon {
+    @apply p-1.5 rounded-md text-sm hover:bg-black/5 dark:hover:bg-white/10 transition-colors;
+  }
+  .field-input {
+    @apply w-full rounded-md border border-black/15 dark:border-white/15 bg-white dark:bg-white/5 px-2 py-1.5 text-sm text-beyond-ink dark:text-beyond-parchment focus:outline-none focus:ring-2 focus:ring-beyond-red/50;
+  }
+  .card {
+    @apply bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-lg;
+  }
+  .tab-chip {
+    @apply px-3 py-1.5 text-xs font-semibold rounded-t-md border border-b-0 border-black/10 dark:border-white/10 cursor-pointer whitespace-nowrap flex items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity;
+  }
+  .tab-chip.active {
+    @apply opacity-100 bg-white dark:bg-white/10 border-beyond-red/40 dark:border-beyond-gold/40 text-beyond-red dark:text-beyond-gold;
+  }
+  .toast {
+    @apply fixed bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 rounded-md text-sm font-medium shadow-lg z-50 max-w-[90%] text-center;
+  }
+}
