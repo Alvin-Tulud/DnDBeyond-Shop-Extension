@@ -4,6 +4,6 @@ make it so add from srd catalog loads all items in for scrollable list
 rename all assets 
 remove hidden shop as functionality is not as intended and is also kinda useless
 - original function was for hidden / obscured items in a shop
-(DONE) - need to populate srd-items.json with more / all items
+(DONE) - need to populate srd-items.json with more / all items (has 5e and 5.5e)
 need real icons (ask joos)
 tie the bundle export to a button as listed in README (known simplifications in this pass)
