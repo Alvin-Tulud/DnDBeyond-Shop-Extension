@@ -1,4 +1,5 @@
 fix darkmode for all dropdown lists (or just remove darkmode kinda unecessary)
+make it so add from srd catalog loads all items in for scrollable list
 - add from SRD Catalog > filter types
 rename all assets 
 remove hidden shop as functionality is not as intended and is also kinda useless
