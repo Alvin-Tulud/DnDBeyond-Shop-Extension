@@ -1,6 +1,7 @@
 /**
  * Creation Interface logic (DM only).
  * Action items: C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15
+ * Live Share (host side): J.37
  */
 
 const Creation = (() => {
@@ -88,34 +89,25 @@ const Creation = (() => {
     }
   }
 
-  // Row height for the catalog result buttons: two short text lines + p-2 padding
-  // (shorter than the default 84px shop-item card, so pass it explicitly).
-  const CATALOG_ROW_HEIGHT = 52;
-
-  function renderCatalogResultRow(item) {
-    const costText = formatCost(item.cost) || "—";
-    return `
-      <button class="catalog-result-item w-full text-left card p-2 hover:border-beyond-red/50 dark:hover:border-beyond-gold/50" data-catalog-id="${item.catalogId}">
-        <div class="flex items-center justify-between gap-2">
-          <span class="font-semibold text-sm">${UI.escapeHtml(item.name)}</span>
-          <span class="text-[11px] opacity-60">${UI.escapeHtml(costText)}</span>
-        </div>
-        <p class="text-[11px] opacity-60">${UI.escapeHtml(item.type)} · ${UI.escapeHtml(item.rarity)}</p>
-      </button>
-    `;
-  }
-
   function renderCatalogResults() {
     const query = $("#catalogSearch").val();
     const type = $("#catalogTypeFilter").val();
     const results = Catalog.search(catalogItems, { query, type });
     const $results = $("#catalogResults");
     $("#catalogEmpty").toggleClass("hidden", results.length > 0);
-    // Virtualized (same helper the shop item lists use) — no arbitrary cap,
-    // so a broad/empty search shows every match instead of silently
-    // truncating past a fixed count. Small result sets (<= VIRTUALIZE_THRESHOLD)
-    // still render directly with no virtualization overhead.
-    renderVirtualList($results, results, renderCatalogResultRow, { rowHeight: CATALOG_ROW_HEIGHT });
+    $results.empty();
+    results.slice(0, 200).forEach((item) => {
+      const costText = formatCost(item.cost) || "—";
+      $results.append(`
+        <button class="catalog-result-item w-full text-left card p-2 hover:border-beyond-red/50 dark:hover:border-beyond-gold/50" data-catalog-id="${item.catalogId}">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-semibold text-sm">${UI.escapeHtml(item.name)}</span>
+            <span class="text-[11px] opacity-60">${UI.escapeHtml(costText)}</span>
+          </div>
+          <p class="text-[11px] opacity-60">${UI.escapeHtml(item.type)} · ${UI.escapeHtml(item.rarity)}</p>
+        </button>
+      `);
+    });
   }
 
   async function addCatalogItemToDraft(catalogId) {
@@ -280,11 +272,102 @@ const Creation = (() => {
       await State.setDraft(result.data.shop);
       refreshTitleInput();
       renderItemList();
+      refreshLiveSessionUI(); // the newly-loaded shop may already have a hosted session on record (J.37)
       UI.showToast(`"${result.data.shop.title}" loaded for editing.`, "success");
     } catch (e) {
       UI.showToast("Could not read that file.", "error");
     } finally {
       $("#creationImportInput").val("");
+    }
+  }
+
+  // ==== J.37: Live Share — host side ====
+
+  function refreshLiveSessionUI() {
+    const session = State.getHostedSession(draft().id);
+    $("#goLiveBtn").toggleClass("hidden", !!session);
+    $("#liveSessionPanel").toggleClass("hidden", !session);
+    if (session) {
+      $("#liveSessionCode").text(session.sessionId);
+      $("#liveSessionMeta").text(`Last published ${UI.formatRelativeTime(session.updatedAt)}. Players join with this code.`);
+    }
+  }
+
+  async function goLive() {
+    if (!Roles.requireDM("Going live")) return;
+    const d = draft();
+    if (!d.title || !d.title.trim()) { UI.showToast("Give the shop a title before going live.", "error"); return; }
+    if (d.items.length === 0) {
+      const proceed = await UI.confirm("This shop has no items yet. Go live anyway?");
+      if (!proceed) return;
+    }
+    d.updatedAt = new Date().toISOString();
+    d.srdAttribution = computeSrdAttribution(d);
+    await State.setDraft(d);
+
+    const $btn = $("#goLiveBtn");
+    UI.setLoading($btn, true, "Starting…");
+    try {
+      const { sessionId, writeToken, updatedAt } = await Session.hostShop(d);
+      await State.setHostedSession(d.id, { sessionId, writeToken, updatedAt });
+      refreshLiveSessionUI();
+      UI.showToast(`Live! Room code: ${sessionId}`, "success");
+    } catch (e) {
+      UI.showToast(e.message || "Couldn't start a live session.", "error");
+    } finally {
+      UI.setLoading($btn, false);
+    }
+  }
+
+  async function publishLiveUpdate() {
+    if (!Roles.requireDM("Publishing an update")) return;
+    const d = draft();
+    const session = State.getHostedSession(d.id);
+    if (!session) return;
+    d.updatedAt = new Date().toISOString();
+    d.srdAttribution = computeSrdAttribution(d);
+    await State.setDraft(d);
+
+    const $btn = $("#publishUpdateBtn");
+    UI.setLoading($btn, true, "Publishing…");
+    try {
+      const { updatedAt } = await Session.publishUpdate(session.sessionId, session.writeToken, d);
+      await State.setHostedSession(d.id, { ...session, updatedAt });
+      refreshLiveSessionUI();
+      UI.showToast("Live shop updated.", "success");
+    } catch (e) {
+      UI.showToast(e.message || "Couldn't publish the update.", "error");
+    } finally {
+      UI.setLoading($btn, false);
+    }
+  }
+
+  async function endLiveSession() {
+    if (!Roles.requireDM("Ending a live session")) return;
+    const d = draft();
+    const session = State.getHostedSession(d.id);
+    if (!session) return;
+    const ok = await UI.confirm(`End the live session (room code ${session.sessionId})? Players who already joined keep the last copy they synced, but won't receive further updates.`);
+    if (!ok) return;
+    try {
+      await Session.endSession(session.sessionId, session.writeToken);
+    } catch (e) {
+      // Still clear the local record even if the relay call fails, so the DM isn't stuck
+      // thinking they're live when they've already tried to end it.
+    }
+    await State.clearHostedSession(d.id);
+    refreshLiveSessionUI();
+    UI.showToast("Live session ended.", "info");
+  }
+
+  async function copyRoomCode() {
+    const session = State.getHostedSession(draft().id);
+    if (!session) return;
+    try {
+      await navigator.clipboard.writeText(session.sessionId);
+      UI.showToast("Room code copied.", "success");
+    } catch (e) {
+      UI.showToast(`Room code: ${session.sessionId}`, "info");
     }
   }
 
@@ -300,13 +383,20 @@ const Creation = (() => {
     $("#customItemForm").on("submit", submitCustomItemForm);
     $("#exportShopBtn").on("click", exportShop);
     $("#creationImportInput").on("change", function () { importForEditing(this.files); });
+
+    // Live Share (J.37)
+    $("#goLiveBtn").on("click", goLive);
+    $("#publishUpdateBtn").on("click", publishLiveUpdate);
+    $("#endLiveSessionBtn").on("click", endLiveSession);
+    $("#copyRoomCodeBtn").on("click", copyRoomCode);
   }
 
   function init() {
     bindEvents();
     refreshTitleInput();
     renderItemList();
+    refreshLiveSessionUI();
   }
 
-  return { init, renderItemList, refreshTitleInput };
+  return { init, renderItemList, refreshTitleInput, refreshLiveSessionUI };
 })();

@@ -9,10 +9,10 @@
     "vendor:jquery": "node -e \"require('fs').copyFileSync('node_modules/jquery/dist/jquery.min.js', 'js/jquery.min.js')\"",
     "postinstall": "npm run vendor:jquery && npm run build:css",
     "build": "npm run vendor:jquery && npm run build:css",
-    "fetch:srd": "node js/fetch-srd.js",
-    "fetch:srd52": "node js/fetch-srd.js --edition=2024",
-    "merge:srd": "node js/fetch-srd.js --merge",
-    "merge:srd52": "node js/fetch-srd.js --edition=2024 --merge"
+    "fetch:srd": "node scripts/fetch-srd.js",
+    "fetch:srd52": "node scripts/fetch-srd.js --edition=2024",
+    "merge:srd": "node scripts/fetch-srd.js --merge",
+    "merge:srd52": "node scripts/fetch-srd.js --edition=2024 --merge"
   },
   "devDependencies": {
     "jquery": "^4.0.0",

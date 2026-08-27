@@ -1,6 +1,7 @@
 /**
  * Regular (player) Interface logic.
  * Action items: D.16, D.17, D.18, D.19, D.19a, D.19b, D.19c, D.20, D.21, D.22, D.23
+ * Live Share (player side): J.38
  */
 
 const Regular = (() => {
@@ -23,7 +24,7 @@ const Regular = (() => {
         }
         if (result.data.type === "bundle") {
           for (const shop of result.data.shops) {
-            await State.upsertShopTab(shop);
+            await State.upsertShopTab(shop); // defaults to source: "file" (J.39)
             successCount++;
           }
         } else {
@@ -75,8 +76,12 @@ const Regular = (() => {
 
     withTitles.forEach((t) => {
       const active = t.shop.id === State.getActiveShopId();
+      const liveMarker = t.source === "session"
+        ? `<span class="text-[10px]" title="Live synced">📡</span>`
+        : "";
       const $tab = $(`
         <div class="tab-chip ${active ? "active" : ""}" data-shop-id="${t.shop.id}" role="tab" aria-selected="${active}">
+          ${liveMarker}
           <span class="truncate max-w-[110px]">${UI.escapeHtml(t.displayTitle)}</span>
           <button class="tab-hide-btn opacity-60 hover:opacity-100" title="Hide tab">🙈</button>
           <button class="tab-close-btn opacity-60 hover:opacity-100" title="Close tab">✕</button>
@@ -144,11 +149,10 @@ const Regular = (() => {
     const tabs = State.getTabs();
     const activeEntry = activeId ? tabs[activeId] : null;
 
-    const hasVisibleTabs = State.getVisibleTabs().length > 0;
-
     if (!activeEntry || activeEntry.hidden) {
       $("#regularShopHeader, #regularToolbar").addClass("hidden");
       $("#regularItemList").addClass("hidden").empty();
+      $("#refreshSessionBtn").addClass("hidden");
       renderEmptyState();
       return;
     }
@@ -159,7 +163,11 @@ const Regular = (() => {
     const shop = activeEntry.shop;
     $("#regularShopTitle").text(shop.title);
     const itemCount = shop.items.length;
-    $("#regularShopMeta").text(`${itemCount} item${itemCount === 1 ? "" : "s"}${shop.srdAttribution ? " · includes SRD content" : ""}`);
+    const metaParts = [`${itemCount} item${itemCount === 1 ? "" : "s"}`];
+    if (shop.srdAttribution) metaParts.push("includes SRD content");
+    if (activeEntry.source === "session") metaParts.push(`live · synced ${UI.formatRelativeTime(activeEntry.lastSyncedAt)}`);
+    $("#regularShopMeta").text(metaParts.join(" · "));
+    $("#refreshSessionBtn").toggleClass("hidden", activeEntry.source !== "session");
 
     populateRarityFilter(shop);
     const items = getFilteredSortedItems(shop);
@@ -178,7 +186,7 @@ const Regular = (() => {
 
     const hiddenTabs = State.getHiddenTabs();
     if (hiddenTabs.length === 0) {
-      $("#regularEmptyText").html(`No shop loaded yet. Import a shop JSON file from your DM to get started.`);
+      $("#regularEmptyText").html(`No shop loaded yet. Import a shop JSON file, or join a live session with a room code.`);
     } else {
       $("#regularEmptyText").html(
         `No visible shops — you have <strong>${hiddenTabs.length}</strong> hidden. ` +
@@ -212,7 +220,10 @@ const Regular = (() => {
   async function closeTab(shopId) {
     const entry = State.getTabs()[shopId];
     if (!entry) return;
-    const ok = await UI.confirm(`Close "${entry.shop.title}"? This removes it from your view and can't be undone — you'd need to re-import the file to get it back.`);
+    const message = entry.source === "session"
+      ? `Leave "${entry.shop.title}"? This removes it from your view and stops syncing — you'd need to rejoin with the room code to get it back.`
+      : `Close "${entry.shop.title}"? This removes it from your view and can't be undone — you'd need to re-import the file to get it back.`;
+    const ok = await UI.confirm(message);
     if (!ok) return;
 
     const wasActive = State.getActiveShopId() === shopId;
@@ -224,6 +235,66 @@ const Regular = (() => {
     }
     render();
     UI.showToast(`"${entry.shop.title}" closed.`, "info");
+  }
+
+  // ==== J.38: Live Share — player side ====
+
+  async function joinSession() {
+    const codeRaw = $("#joinSessionCode").val();
+    const code = (codeRaw || "").trim().toUpperCase();
+    if (!code) { UI.showToast("Enter a room code first.", "error"); return; }
+
+    const $btn = $("#joinSessionBtn");
+    UI.setLoading($btn, true, "Joining…");
+    try {
+      const result = await Session.fetchLatest(code);
+      if (!result) { UI.showToast("No live session found for that code.", "error"); return; }
+      validateShop(result.shop); // same validation logic as a file import (G.28), just skipping the JSON.parse step since this is already an object
+      await State.upsertShopTab(result.shop, {
+        source: "session",
+        sessionId: code,
+        lastSyncedAt: new Date().toISOString(),
+        sessionUpdatedAt: result.updatedAt
+      });
+      State.setActiveShopId(result.shop.id);
+      $("#joinSessionCode").val("");
+      UI.showToast(`Joined "${result.shop.title}".`, "success");
+      render();
+    } catch (e) {
+      UI.showToast(e.message || "Couldn't join that session.", "error");
+    } finally {
+      UI.setLoading($btn, false);
+    }
+  }
+
+  async function refreshActiveSessionTab() {
+    const activeId = State.getActiveShopId();
+    const entry = activeId ? State.getTabs()[activeId] : null;
+    if (!entry || entry.source !== "session") return;
+
+    const $btn = $("#refreshSessionBtn");
+    UI.setLoading($btn, true, "…");
+    try {
+      const result = await Session.fetchLatest(entry.sessionId);
+      if (!result) {
+        UI.showToast("This live session is no longer available — the DM may have ended it.", "error");
+        return;
+      }
+      validateShop(result.shop);
+      const changed = result.updatedAt !== entry.sessionUpdatedAt;
+      await State.upsertShopTab(result.shop, {
+        source: "session",
+        sessionId: entry.sessionId,
+        lastSyncedAt: new Date().toISOString(),
+        sessionUpdatedAt: result.updatedAt
+      });
+      UI.showToast(changed ? "Shop updated." : "Already up to date.", changed ? "success" : "info");
+      render();
+    } catch (e) {
+      UI.showToast(e.message || "Couldn't check for updates.", "error");
+    } finally {
+      UI.setLoading($btn, false);
+    }
   }
 
   function bindEvents() {
@@ -245,6 +316,11 @@ const Regular = (() => {
 
     $("#regularSearch").on("input", debounce(renderActiveShop, 200)); // I.34 debounce
     $("#regularRarityFilter, #regularSort").on("change", renderActiveShop);
+
+    // Live Share (J.38)
+    $("#joinSessionBtn").on("click", joinSession);
+    $("#joinSessionCode").on("keydown", function (e) { if (e.key === "Enter") joinSession(); });
+    $("#refreshSessionBtn").on("click", refreshActiveSessionTab);
   }
 
   function init() {

@@ -1,7 +1,7 @@
 {
   "srdVersion": "5.2",
-  "pulledAt": "2026-08-26",
-  "sourceNote": "Pulled from dnd5eapi.co (/api/2024, SRD 5.2 (2024 rules)) via scripts/fetch-srd.js --merge, on top of an existing file (previously 599 items, srdVersion 5.1, pulled 2026-08-26). Entries from this pull replaced any matching catalogId; entries only in the old file were preserved as-is. Not a runtime call.",
+  "pulledAt": "2026-08-27",
+  "sourceNote": "Pulled from dnd5eapi.co (/api/2024, SRD 5.2 (2024 rules)) via scripts/fetch-srd.js --merge, on top of an existing file (previously 624 items, srdVersion 5.1, pulled 2026-08-27). Entries from this pull replaced any matching catalogId; entries only in the old file were preserved as-is. Not a runtime call.",
   "items": [
     {
       "catalogId": "srd-abacus",
@@ -396,6 +396,19 @@
       "description": "Wondrous Item  \n This bag resembles a Bag of Holding but is a feedingorifice for a gigantic extradimensional creature. Turning the bag inside out closes the orifice.  \n The extradimensional creature attached to the bag can sense whatever is placed inside the bag. Animal or vegetable matter placed wholly in the bag is devoured and lost forever. When part of a living creature is placed in the bag, as happens when someone reaches inside it, there is a 50 percent chance that the creature is pulled inside the bag. A creature inside the bag can take an action to try to escape, doing so with a successful DC 15 Strength (Athletics) check. Another creature can take an action to reach into the bag to pull a creature out, doing so with a successful DC 20 Strength (Athletics) check, provided the puller isn't pulled inside the bag first. Any creature that starts its turn inside the bag is devoured, its body destroyed.  \n Inanimate objects can be stored in the bag, which can hold a cubic foot of such material. However, once each day, the bag swallows any objects inside it and spits them out into another plane of existence. The GM determines the time and plane.  \n If the bag is pierced or torn, it is destroyed, and anything contained within it is transported to a random location on the Astral Plane.",
       "cost": null,
       "weight": null
+    },
+    {
+      "catalogId": "srd-bagofholding",
+      "name": "Bag of Holding",
+      "type": "Wondrous Item",
+      "rarity": "Uncommon",
+      "description": "A bag with an interior space much larger than its outside dimensions, holding up to 500 lbs.",
+      "cost": {
+        "gp": 4000,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 15
     },
     {
       "catalogId": "srd-bag-of-holding",
@@ -891,6 +904,19 @@
         "cp": 0
       },
       "weight": 5
+    },
+    {
+      "catalogId": "srd-boots-elvenkind",
+      "name": "Boots of Elvenkind",
+      "type": "Wondrous Item",
+      "rarity": "Uncommon",
+      "description": "Advantage on Dexterity (Stealth) checks related to moving silently while worn.",
+      "cost": {
+        "gp": 2500,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 1
     },
     {
       "catalogId": "srd-boots-of-elvenkind",
@@ -1396,6 +1422,19 @@
       "weight": 10
     },
     {
+      "catalogId": "srd-chainmail",
+      "name": "Chain Mail",
+      "type": "Heavy Armor",
+      "rarity": "Common",
+      "description": "Interlocking metal rings. AC 16, Str 13 required.",
+      "cost": {
+        "gp": 75,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 55
+    },
+    {
       "catalogId": "srd-chain-mail",
       "name": "Chain Mail",
       "type": "Adventuring Gear",
@@ -1407,6 +1446,19 @@
         "cp": 0
       },
       "weight": 55
+    },
+    {
+      "catalogId": "srd-chainshirt",
+      "name": "Chain Shirt",
+      "type": "Medium Armor",
+      "rarity": "Common",
+      "description": "Fine mail worn as a shirt. AC 13 + Dex (max 2).",
+      "cost": {
+        "gp": 50,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 20
     },
     {
       "catalogId": "srd-chain-shirt",
@@ -1510,6 +1562,19 @@
       "weight": null
     },
     {
+      "catalogId": "srd-cloak-elvenkind",
+      "name": "Cloak of Elvenkind",
+      "type": "Wondrous Item",
+      "rarity": "Uncommon",
+      "description": "Advantage on Stealth checks and disadvantage on Perception checks made to see you while worn.",
+      "cost": {
+        "gp": 3000,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 1
+    },
+    {
       "catalogId": "srd-cloak-of-elvenkind",
       "name": "Cloak of Elvenkind",
       "type": "Wondrous Items",
@@ -1517,6 +1582,19 @@
       "description": "Wondrous Item  \n While you wear this cloak, Wisdom (Perception) checks made to perceive you have Disadvantage, and you have Advantage on Dexterity (Stealth) checks.",
       "cost": null,
       "weight": null
+    },
+    {
+      "catalogId": "srd-cloakofprotection",
+      "name": "Cloak of Protection",
+      "type": "Wondrous Item",
+      "rarity": "Uncommon",
+      "description": "You gain a +1 bonus to AC and saving throws while wearing this cloak.",
+      "cost": {
+        "gp": 3500,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 1
     },
     {
       "catalogId": "srd-cloak-of-protection",
@@ -1716,6 +1794,19 @@
       "type": "Simple Ranged Weapon",
       "rarity": "Common",
       "description": "Damage: 1d8 Piercing. Range 80/320 ft.",
+      "cost": {
+        "gp": 25,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 5
+    },
+    {
+      "catalogId": "srd-lightcrossbow",
+      "name": "Crossbow, Light",
+      "type": "Simple Ranged Weapon",
+      "rarity": "Common",
+      "description": "A hand-loaded crossbow (range 80/320).",
       "cost": {
         "gp": 25,
         "sp": 0,
@@ -2621,6 +2712,19 @@
       "weight": 6
     },
     {
+      "catalogId": "srd-halfplate",
+      "name": "Half Plate",
+      "type": "Medium Armor",
+      "rarity": "Common",
+      "description": "Shaped metal plates covering most of the body. AC 15 + Dex (max 2).",
+      "cost": {
+        "gp": 750,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 40
+    },
+    {
       "catalogId": "srd-half-plate-armor",
       "name": "Half-Plate Armor",
       "type": "Adventuring Gear",
@@ -2722,6 +2826,19 @@
       "weight": null
     },
     {
+      "catalogId": "srd-healerskit",
+      "name": "Healer's Kit",
+      "type": "Adventuring Gear",
+      "rarity": "Common",
+      "description": "Bandages, salves, and splints; 10 uses.",
+      "cost": {
+        "gp": 5,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 3
+    },
+    {
       "catalogId": "srd-healers-kit",
       "name": "Healer's Kit",
       "type": "Adventuring Gear",
@@ -2817,6 +2934,19 @@
       "description": "Weapon (Any Simple or Martial)  \n You gain a +3 bonus to attack rolls and damage rolls made with this magic weapon. When you hit a Fiend or an Undead with it, that creature takes an extra 2d10 Radiant damage.While you hold the drawn weapon, it creates a10-foot Emanation originating from you. You and all creatures Friendly to you in the Emanation have Advantage on saving throws against spells and other magical effects. If you have 17 or more levels in the Paladin class, the size of the Emanation increases to 30 feet.",
       "cost": null,
       "weight": null
+    },
+    {
+      "catalogId": "srd-holy-symbol",
+      "name": "Holy Symbol",
+      "type": "Adventuring Gear",
+      "rarity": "Common",
+      "description": "A representation of a deity, used as a spellcasting focus.",
+      "cost": {
+        "gp": 5,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 1
     },
     {
       "catalogId": "srd-holy-water",
@@ -3353,6 +3483,19 @@
       "weight": 2
     },
     {
+      "catalogId": "srd-leather",
+      "name": "Leather Armor",
+      "type": "Light Armor",
+      "rarity": "Common",
+      "description": "Boiled and shaped leather. AC 11 + Dex.",
+      "cost": {
+        "gp": 10,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 10
+    },
+    {
       "catalogId": "srd-leather-armor",
       "name": "Leather Armor",
       "type": "Adventuring Gear",
@@ -3397,6 +3540,19 @@
       "type": "Adventuring Gear",
       "rarity": "Common",
       "description": "Damage: 1d4 Bludgeoning. Range 5 ft. Mastery: Nick.",
+      "cost": {
+        "gp": 2,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 2
+    },
+    {
+      "catalogId": "srd-lightham",
+      "name": "Light Hammer",
+      "type": "Simple Melee Weapon",
+      "rarity": "Common",
+      "description": "A small one-handed hammer, throwable (range 20/60).",
       "cost": {
         "gp": 2,
         "sp": 0,
@@ -4009,6 +4165,19 @@
       "weight": null
     },
     {
+      "catalogId": "srd-padded",
+      "name": "Padded Armor",
+      "type": "Light Armor",
+      "rarity": "Common",
+      "description": "Quilted layers of cloth and batting. AC 11 + Dex.",
+      "cost": {
+        "gp": 5,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 8
+    },
+    {
       "catalogId": "srd-padded-armor",
       "name": "Padded Armor",
       "type": "Adventuring Gear",
@@ -4239,6 +4408,19 @@
         "cp": 5
       },
       "weight": 0.25
+    },
+    {
+      "catalogId": "srd-platearmor",
+      "name": "Plate Armor",
+      "type": "Heavy Armor",
+      "rarity": "Common",
+      "description": "Fitted full-body plate. AC 18, Str 15 required.",
+      "cost": {
+        "gp": 1500,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 65
     },
     {
       "catalogId": "srd-plate-armor",
@@ -4515,6 +4697,19 @@
       "weight": null
     },
     {
+      "catalogId": "srd-potion-greaterhealing",
+      "name": "Potion of Greater Healing",
+      "type": "Potion",
+      "rarity": "Uncommon",
+      "description": "Restores 4d4+4 hit points when drunk.",
+      "cost": {
+        "gp": 150,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 0.5
+    },
+    {
       "catalogId": "srd-potion-of-healing-greater",
       "name": "Potion of Greater Healing",
       "type": "Potion",
@@ -4531,6 +4726,19 @@
       "description": "Potion  \n When you drink this potion, you gain the \"enlarge\" effect of the Enlarge/Reduce spell for 10 minutes (no Concentration required).  \n The red in the potion's liquid continuously expands from a tiny bead to color the clear liquid around it and then contracts. Shaking the bottle fails to interrupt this process.",
       "cost": null,
       "weight": null
+    },
+    {
+      "catalogId": "srd-potion-healing",
+      "name": "Potion of Healing",
+      "type": "Potion",
+      "rarity": "Common",
+      "description": "A magical red liquid that restores 2d4+2 hit points when drunk.",
+      "cost": {
+        "gp": 50,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 0.5
     },
     {
       "catalogId": "srd-potion-of-healing",
@@ -4830,6 +5038,19 @@
       "weight": 2
     },
     {
+      "catalogId": "srd-ration",
+      "name": "Rations (1 day)",
+      "type": "Adventuring Gear",
+      "rarity": "Common",
+      "description": "Dried food sufficient for one day.",
+      "cost": {
+        "gp": 0,
+        "sp": 5,
+        "cp": 0
+      },
+      "weight": 2
+    },
+    {
       "catalogId": "srd-rations-1-day",
       "name": "Rations (1 day)",
       "type": "Standard Gear",
@@ -4872,6 +5093,19 @@
       "description": "Wondrous item, uncommon This glass jar, 3 inches in diameter, contains 1d4 + 1 doses of a thick mixture that smells faintly of aloe. The jar and its contents weigh 1/2 pound. As an action, one dose of the ointment can be swallowed or applied to the skin. The creature that receives it regains 2d8 + 2 hit points, ceases to be poisoned, and is cured of any disease.",
       "cost": null,
       "weight": null
+    },
+    {
+      "catalogId": "srd-ringmail",
+      "name": "Ring Mail",
+      "type": "Heavy Armor",
+      "rarity": "Common",
+      "description": "Leather armor with heavy rings sewn in. AC 14.",
+      "cost": {
+        "gp": 30,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 40
     },
     {
       "catalogId": "srd-ring-mail",
@@ -5056,6 +5290,19 @@
       "description": "Ring, rare (requires attunement) You have resistance to poison damage while wearing this amethyst ring.",
       "cost": null,
       "weight": null
+    },
+    {
+      "catalogId": "srd-ringofprotection",
+      "name": "Ring of Protection",
+      "type": "Ring",
+      "rarity": "Rare",
+      "description": "You gain a +1 bonus to AC and saving throws while wearing this ring.",
+      "cost": {
+        "gp": 5000,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 0
     },
     {
       "catalogId": "srd-ring-of-protection",
@@ -5384,6 +5631,19 @@
       "weight": 10
     },
     {
+      "catalogId": "srd-rope-hemp",
+      "name": "Rope, Hempen (50 feet)",
+      "type": "Adventuring Gear",
+      "rarity": "Common",
+      "description": "Sturdy 50-foot coil of rope.",
+      "cost": {
+        "gp": 1,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 10
+    },
+    {
       "catalogId": "srd-rope-silk-50-feet",
       "name": "Rope, silk (50 feet)",
       "type": "Standard Gear",
@@ -5591,6 +5851,19 @@
         "cp": 0
       },
       "weight": 0
+    },
+    {
+      "catalogId": "srd-sentinelshield",
+      "name": "Sentinel Shield",
+      "type": "Armor (Shield)",
+      "rarity": "Uncommon",
+      "description": "A shield that grants advantage on Wisdom (Perception) checks and initiative rolls.",
+      "cost": {
+        "gp": 1000,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 6
     },
     {
       "catalogId": "srd-figurine-of-wondrous-power-serpentine-owl",
@@ -6052,6 +6325,19 @@
       "weight": 2
     },
     {
+      "catalogId": "srd-splintarmor",
+      "name": "Splint Armor",
+      "type": "Heavy Armor",
+      "rarity": "Common",
+      "description": "Narrow vertical metal strips. AC 17, Str 15 required.",
+      "cost": {
+        "gp": 200,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 60
+    },
+    {
       "catalogId": "srd-splint-armor",
       "name": "Splint Armor",
       "type": "Adventuring Gear",
@@ -6274,6 +6560,19 @@
       "weight": 0
     },
     {
+      "catalogId": "srd-studdedleather",
+      "name": "Studded Leather Armor",
+      "type": "Light Armor",
+      "rarity": "Common",
+      "description": "Leather reinforced with rivets. AC 12 + Dex.",
+      "cost": {
+        "gp": 45,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 13
+    },
+    {
       "catalogId": "srd-studded-leather-armor",
       "name": "Studded Leather Armor",
       "type": "Adventuring Gear",
@@ -6392,6 +6691,19 @@
         "cp": 0
       },
       "weight": 20
+    },
+    {
+      "catalogId": "srd-thievestools",
+      "name": "Thieves' Tools",
+      "type": "Tool",
+      "rarity": "Common",
+      "description": "Lockpicks and small tools for disarming traps.",
+      "cost": {
+        "gp": 25,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 1
     },
     {
       "catalogId": "srd-thieves-tools",
@@ -6670,6 +6982,19 @@
       "description": "Wand  \n This wand has 3 charges. While holding it, you can expend 1 charge to cast Detect Magic from it. The wand regains 1d3 expended charges daily at dawn.",
       "cost": null,
       "weight": null
+    },
+    {
+      "catalogId": "srd-wandofmagicmissile",
+      "name": "Wand of Magic Missile",
+      "type": "Wand",
+      "rarity": "Uncommon",
+      "description": "This wand has 7 charges, allowing you to cast magic missile at will.",
+      "cost": {
+        "gp": 2500,
+        "sp": 0,
+        "cp": 0
+      },
+      "weight": 1
     },
     {
       "catalogId": "srd-wand-of-magic-missiles",

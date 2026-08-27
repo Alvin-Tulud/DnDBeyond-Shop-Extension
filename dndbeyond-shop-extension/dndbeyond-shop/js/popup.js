@@ -22,7 +22,10 @@ function switchView(view) {
       .toggleClass("border-transparent text-beyond-ink/60 dark:text-beyond-parchment/60", !active);
   });
 
-  if (isCreation) Creation.refreshTitleInput();
+  if (isCreation) {
+    Creation.refreshTitleInput();
+    Creation.refreshLiveSessionUI(); // J.37 — keep the Go Live / Publish panel in sync with the current draft
+  }
 }
 
 async function init() {
