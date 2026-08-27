@@ -37,7 +37,7 @@ const Regular = (() => {
     }
 
     if (successCount > 0) {
-      const first = State.getVisibleTabs().sort((a, b) => b.loadOrder - a.loadOrder)[0];
+      const first = State.getSortedTabs().sort((a, b) => b.loadOrder - a.loadOrder)[0];
       if (first) State.setActiveShopId(first.shop.id);
       UI.showToast(`Loaded ${successCount} shop${successCount === 1 ? "" : "s"}.`, "success");
     }
@@ -69,6 +69,7 @@ const Regular = (() => {
 
   // ---- D.19: tab bar rendering ----
   function renderTabBar() {
+    const visible = State.getSortedTabs();
     const withTitles = computeDisplayTitles(visible);
     const $bar = $("#shopTabBar");
     $bar.empty();
@@ -88,8 +89,6 @@ const Regular = (() => {
       `);
       $bar.append($tab);
     });
-
-    $("#hiddenCount").text(State.getHiddenTabs().length);
   }
 
   // ---- D.22: player-side search/filter/sort scoped to active tab ----
@@ -144,6 +143,7 @@ const Regular = (() => {
 
   // ---- D.21 + D.19c: render active shop title/list, or the correct empty state ----
   function renderActiveShop() {
+    const hasVisibleTabs = State.getSortedTabs().length > 0;
     const activeId = State.getActiveShopId();
     const tabs = State.getTabs();
     const activeEntry = activeId ? tabs[activeId] : null;
@@ -180,18 +180,8 @@ const Regular = (() => {
   // ---- D.19c: empty-state distinction (no tabs at all vs. hidden-only) ----
   function renderEmptyState() {
     $("#regularEmptyState").removeClass("hidden");
-    const hasVisibleTabs = State.getVisibleTabs().length > 0;
+    const hasVisibleTabs = State.getSortedTabs().length > 0;
     if (hasVisibleTabs) return; // shouldn't happen when this is called, but guard anyway
-
-    const hiddenTabs = State.getHiddenTabs();
-    if (hiddenTabs.length === 0) {
-      $("#regularEmptyText").html(`No shop loaded yet. Import a shop JSON file, or join a live session with a room code.`);
-    } else {
-      $("#regularEmptyText").html(
-        `No visible shops — you have <strong>${hiddenTabs.length}</strong> hidden. ` +
-        `<button id="emptyStateHiddenLink" class="underline font-semibold">View hidden shops</button>`
-      );
-    }
   }
 
   function render() {
@@ -203,7 +193,7 @@ const Regular = (() => {
   async function hideTab(shopId) {
     await State.setTabHidden(shopId, true);
     if (State.getActiveShopId() === shopId) {
-      const nextVisible = State.getVisibleTabs()[0];
+      const nextVisible = State.getSortedTabs()[0];
       State.setActiveShopId(nextVisible ? nextVisible.shop.id : null);
     }
     render();
@@ -229,7 +219,7 @@ const Regular = (() => {
     await State.closeShopTab(shopId);
 
     if (wasActive) {
-      const nextVisible = State.getVisibleTabs()[0];
+      const nextVisible = State.getSortedTabs()[0];
       State.setActiveShopId(nextVisible ? nextVisible.shop.id : null);
     }
     render();
