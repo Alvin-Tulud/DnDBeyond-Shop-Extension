@@ -46,7 +46,6 @@
           📂 Import Shop(s)
           <input type="file" id="uploadInput" accept="application/json" multiple class="hidden" />
         </label>
-        <button id="hiddenShopsBtn" class="btn-icon text-xs" title="View hidden shops">🙈 Hidden (<span id="hiddenCount">0</span>)</button>
       </div>
 
       <!-- Tab bar -->
@@ -130,7 +129,7 @@
         </select>
       </div>
       <div id="catalogLoading" class="text-xs opacity-60 py-2 hidden">Loading catalog…</div>
-      <div id="catalogResults" class="flex-1 flex-col flex-nowrap overflow-y-auto space-y-1.5" style="max-height: 360px;"></div>
+      <div id="catalogResults" class="flex-1 flex-col flex-nowrap overflow-y-auto space-y-1.5 gap-2" style="max-height: 360px;"></div>
       <div id="catalogEmpty" class="text-xs opacity-60 py-4 text-center hidden">No matching items.</div>
     </div>
   </div>
@@ -182,18 +181,6 @@
           <button type="button" class="btn-secondary flex-1" data-close="customItemModal">Cancel</button>
         </div>
       </form>
-    </div>
-  </div>
-
-  <!-- Hidden shops modal -->
-  <div id="hiddenShopsModal" class="modal-overlay hidden">
-    <div class="modal-panel">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="font-display font-bold">Hidden Shops</h3>
-        <button class="modal-close-btn" data-close="hiddenShopsModal">✕</button>
-      </div>
-      <div id="hiddenShopsList" class="space-y-1.5" style="max-height: 360px; overflow-y:auto;"></div>
-      <div id="hiddenShopsEmpty" class="text-xs opacity-60 py-4 text-center hidden">No hidden shops.</div>
     </div>
   </div>
 

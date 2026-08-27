@@ -88,25 +88,34 @@ const Creation = (() => {
     }
   }
 
+  // Row height for the catalog result buttons: two short text lines + p-2 padding
+  // (shorter than the default 84px shop-item card, so pass it explicitly).
+  const CATALOG_ROW_HEIGHT = 52;
+
+  function renderCatalogResultRow(item) {
+    const costText = formatCost(item.cost) || "—";
+    return `
+      <button class="catalog-result-item w-full text-left card p-2 hover:border-beyond-red/50 dark:hover:border-beyond-gold/50" data-catalog-id="${item.catalogId}">
+        <div class="flex items-center justify-between gap-2">
+          <span class="font-semibold text-sm">${UI.escapeHtml(item.name)}</span>
+          <span class="text-[11px] opacity-60">${UI.escapeHtml(costText)}</span>
+        </div>
+        <p class="text-[11px] opacity-60">${UI.escapeHtml(item.type)} · ${UI.escapeHtml(item.rarity)}</p>
+      </button>
+    `;
+  }
+
   function renderCatalogResults() {
     const query = $("#catalogSearch").val();
     const type = $("#catalogTypeFilter").val();
     const results = Catalog.search(catalogItems, { query, type });
     const $results = $("#catalogResults");
     $("#catalogEmpty").toggleClass("hidden", results.length > 0);
-    $results.empty();
-    results.slice(0, 200).forEach((item) => {
-      const costText = formatCost(item.cost) || "—";
-      $results.append(`
-        <button class="catalog-result-item w-full text-left card p-2 hover:border-beyond-red/50 dark:hover:border-beyond-gold/50" data-catalog-id="${item.catalogId}">
-          <div class="flex items-center justify-between gap-2">
-            <span class="font-semibold text-sm">${UI.escapeHtml(item.name)}</span>
-            <span class="text-[11px] opacity-60">${UI.escapeHtml(costText)}</span>
-          </div>
-          <p class="text-[11px] opacity-60">${UI.escapeHtml(item.type)} · ${UI.escapeHtml(item.rarity)}</p>
-        </button>
-      `);
-    });
+    // Virtualized (same helper the shop item lists use) — no arbitrary cap,
+    // so a broad/empty search shows every match instead of silently
+    // truncating past a fixed count. Small result sets (<= VIRTUALIZE_THRESHOLD)
+    // still render directly with no virtualization overhead.
+    renderVirtualList($results, results, renderCatalogResultRow, { rowHeight: CATALOG_ROW_HEIGHT });
   }
 
   async function addCatalogItemToDraft(catalogId) {

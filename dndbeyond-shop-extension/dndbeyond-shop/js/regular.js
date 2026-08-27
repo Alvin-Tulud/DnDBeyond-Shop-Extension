@@ -206,7 +206,6 @@ const Regular = (() => {
     await State.setTabHidden(shopId, false);
     State.setActiveShopId(shopId);
     render();
-    renderHiddenShopsModal();
   }
 
   // ---- D.19b: close-tab control (irreversible; confirm first) ----
@@ -224,26 +223,7 @@ const Regular = (() => {
       State.setActiveShopId(nextVisible ? nextVisible.shop.id : null);
     }
     render();
-    renderHiddenShopsModal();
     UI.showToast(`"${entry.shop.title}" closed.`, "info");
-  }
-
-  function renderHiddenShopsModal() {
-    const hidden = State.getHiddenTabs();
-    const $list = $("#hiddenShopsList");
-    $("#hiddenShopsEmpty").toggleClass("hidden", hidden.length > 0);
-    $list.empty();
-    hidden.forEach((t) => {
-      $list.append(`
-        <div class="card p-2 flex items-center justify-between gap-2" data-shop-id="${t.shop.id}">
-          <span class="text-sm font-semibold truncate">${UI.escapeHtml(t.shop.title)}</span>
-          <div class="flex gap-1">
-            <button class="unhide-btn btn-secondary !py-1 !px-2 text-xs">Unhide</button>
-            <button class="close-from-hidden-btn btn-icon text-xs" title="Close permanently">🗑</button>
-          </div>
-        </div>
-      `);
-    });
   }
 
   function bindEvents() {
@@ -265,18 +245,6 @@ const Regular = (() => {
 
     $("#regularSearch").on("input", debounce(renderActiveShop, 200)); // I.34 debounce
     $("#regularRarityFilter, #regularSort").on("change", renderActiveShop);
-
-    $("#hiddenShopsBtn").on("click", () => { renderHiddenShopsModal(); UI.openModal("hiddenShopsModal"); });
-    $("#hiddenShopsList").on("click", ".unhide-btn", function () {
-      unhideTab($(this).closest("[data-shop-id]").data("shop-id"));
-    });
-    $("#hiddenShopsList").on("click", ".close-from-hidden-btn", function () {
-      closeTab($(this).closest("[data-shop-id]").data("shop-id"));
-    });
-    $(document).on("click", "#emptyStateHiddenLink", () => {
-      renderHiddenShopsModal();
-      UI.openModal("hiddenShopsModal");
-    });
   }
 
   function init() {
