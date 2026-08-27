@@ -69,7 +69,6 @@ const Regular = (() => {
 
   // ---- D.19: tab bar rendering ----
   function renderTabBar() {
-    const visible = State.getVisibleTabs();
     const withTitles = computeDisplayTitles(visible);
     const $bar = $("#shopTabBar");
     $bar.empty();

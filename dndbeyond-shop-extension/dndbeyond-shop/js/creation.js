@@ -123,11 +123,18 @@ const Creation = (() => {
       source: "srd"
     });
     const d = draft();
-    d.items.push(item);
-    d.updatedAt = new Date().toISOString();
-    await State.setDraft(d);
-    renderItemList();
-    UI.showToast(`${catalogItem.name} added to shop.`, "success");
+    if (!draft().items.some((i) => i.name === item.name)) {
+      console.log("Adding catalog item to draft:", item);
+      console.log(draft());
+      d.items.push(item);
+      d.updatedAt = new Date().toISOString();
+      await State.setDraft(d);
+      renderItemList();
+      UI.showToast(`${catalogItem.name} added to shop.`, "success");
+    }
+    else {
+      UI.showToast(`${catalogItem.name} is already in the shop.`, "error");
+    }
   }
 
   // ---- C.10 / C.12: custom item form (also doubles as the edit-item form) ----

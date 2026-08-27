@@ -33,12 +33,6 @@ async function init() {
   applyTheme(State.getTheme());
   Roles.applyRoleToUI();
 
-  $("#themeToggleBtn").on("click", async () => {
-    const next = State.getTheme() === "dark" ? "light" : "dark";
-    await State.setTheme(next);
-    applyTheme(next);
-  });
-
   $("#roleToggleBtn").on("click", () => Roles.toggleRole());
 
   $(".nav-tab").on("click", function () { switchView($(this).data("view")); });
