@@ -99,7 +99,7 @@ const Session = (() => {
   }
 
   // ---- Active adapter — swap this line in Phase 3, nothing else needs to change ----
-  const ACTIVE_ADAPTER = HttpRelayAdapter("https://your-relay.example.com/api");
+  const ACTIVE_ADAPTER = HttpRelayAdapter("https://dndbeyond-relay.alvintulud.workers.dev");
   // const ACTIVE_ADAPTER = LocalMockRelayAdapter;
 
   // ---- Room code generation ----
