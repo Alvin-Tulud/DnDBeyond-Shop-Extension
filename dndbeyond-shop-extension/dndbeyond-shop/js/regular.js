@@ -1,12 +1,29 @@
 /**
  * Regular (player) Interface logic.
- * Action items: D.16, D.17, D.18, D.19, D.19a, D.19b, D.19c, D.20, D.21, D.22, D.23
- * Live Share (player side): J.38
+ * Action items: D.16, D.17, D.18, D.19, D.19b, D.20, D.21, D.22, D.23
+ * Live Share (player side): J.38, J.41
+ *
+ * Round 7: hide/unhide removed — closing (D.19b) is now the only way to
+ * remove a loaded shop from view. See state.js and the spec doc.
  */
 
 const Regular = (() => {
 
   // ---- D.16 / D.17: upload handler — single or multiple files, bundle-aware ----
+  // J.41: if a file would overwrite a tab that's currently live-synced to a
+  // session, warn before silently disconnecting it from that sync.
+  async function upsertFileShop(shop) {
+    const existing = State.getTabs()[shop.id];
+    if (existing && existing.source === "session") {
+      const ok = await UI.confirm(
+        `"${existing.shop.title}" is live-synced to session ${existing.sessionId}. Uploading this file will disconnect it from live sync and replace it with the file's contents — continue?`
+      );
+      if (!ok) return false;
+    }
+    await State.upsertShopTab(shop, { source: "file", sessionId: null, lastSyncedAt: null, sessionUpdatedAt: null });
+    return true;
+  }
+
   async function handleUpload(fileList) {
     const files = Array.from(fileList || []);
     if (files.length === 0) return;
@@ -24,12 +41,10 @@ const Regular = (() => {
         }
         if (result.data.type === "bundle") {
           for (const shop of result.data.shops) {
-            await State.upsertShopTab(shop); // defaults to source: "file" (J.39)
-            successCount++;
+            if (await upsertFileShop(shop)) successCount++;
           }
         } else {
-          await State.upsertShopTab(result.data.shop);
-          successCount++;
+          if (await upsertFileShop(result.data.shop)) successCount++;
         }
       } catch (e) {
         errors.push(`${file.name}: could not be read.`);
@@ -51,7 +66,6 @@ const Regular = (() => {
 
   // ---- D.20: title collision handling in tab bar ----
   function computeDisplayTitles(tabsList) {
-    // tabsList assumed sorted by loadOrder ascending (load/uploader order)
     const seenCounts = {};
     const titleOccurrence = {};
     return tabsList.map((t) => {
@@ -69,8 +83,8 @@ const Regular = (() => {
 
   // ---- D.19: tab bar rendering ----
   function renderTabBar() {
-    const visible = State.getSortedTabs();
-    const withTitles = computeDisplayTitles(visible);
+    const sorted = State.getSortedTabs();
+    const withTitles = computeDisplayTitles(sorted);
     const $bar = $("#shopTabBar");
     $bar.empty();
 
@@ -83,7 +97,6 @@ const Regular = (() => {
         <div class="tab-chip ${active ? "active" : ""}" data-shop-id="${t.shop.id}" role="tab" aria-selected="${active}">
           ${liveMarker}
           <span class="truncate max-w-[110px]">${UI.escapeHtml(t.displayTitle)}</span>
-          <button class="tab-hide-btn opacity-60 hover:opacity-100" title="Hide tab">🙈</button>
           <button class="tab-close-btn opacity-60 hover:opacity-100" title="Close tab">✕</button>
         </div>
       `);
@@ -141,18 +154,17 @@ const Regular = (() => {
       </div>`;
   }
 
-  // ---- D.21 + D.19c: render active shop title/list, or the correct empty state ----
+  // ---- D.21: render active shop title/list, or the empty state ----
   function renderActiveShop() {
-    const hasVisibleTabs = State.getSortedTabs().length > 0;
     const activeId = State.getActiveShopId();
     const tabs = State.getTabs();
     const activeEntry = activeId ? tabs[activeId] : null;
 
-    if (!activeEntry || activeEntry.hidden) {
+    if (!activeEntry) {
       $("#regularShopHeader, #regularToolbar").addClass("hidden");
       $("#regularItemList").addClass("hidden").empty();
       $("#refreshSessionBtn").addClass("hidden");
-      renderEmptyState();
+      $("#regularEmptyState").removeClass("hidden");
       return;
     }
 
@@ -177,32 +189,9 @@ const Regular = (() => {
     }
   }
 
-  // ---- D.19c: empty-state distinction (no tabs at all vs. hidden-only) ----
-  function renderEmptyState() {
-    $("#regularEmptyState").removeClass("hidden");
-    const hasVisibleTabs = State.getSortedTabs().length > 0;
-    if (hasVisibleTabs) return; // shouldn't happen when this is called, but guard anyway
-  }
-
   function render() {
     renderTabBar();
     renderActiveShop();
-  }
-
-  // ---- D.19a: hide-tab control ----
-  async function hideTab(shopId) {
-    await State.setTabHidden(shopId, true);
-    if (State.getActiveShopId() === shopId) {
-      const nextVisible = State.getSortedTabs()[0];
-      State.setActiveShopId(nextVisible ? nextVisible.shop.id : null);
-    }
-    render();
-  }
-
-  async function unhideTab(shopId) {
-    await State.setTabHidden(shopId, false);
-    State.setActiveShopId(shopId);
-    render();
   }
 
   // ---- D.19b: close-tab control (irreversible; confirm first) ----
@@ -219,8 +208,8 @@ const Regular = (() => {
     await State.closeShopTab(shopId);
 
     if (wasActive) {
-      const nextVisible = State.getSortedTabs()[0];
-      State.setActiveShopId(nextVisible ? nextVisible.shop.id : null);
+      const nextTab = State.getSortedTabs()[0];
+      State.setActiveShopId(nextTab ? nextTab.shop.id : null);
     }
     render();
     UI.showToast(`"${entry.shop.title}" closed.`, "info");
@@ -238,7 +227,7 @@ const Regular = (() => {
     try {
       const result = await Session.fetchLatest(code);
       if (!result) { UI.showToast("No live session found for that code.", "error"); return; }
-      validateShop(result.shop); // same validation logic as a file import (G.28), just skipping the JSON.parse step since this is already an object
+      validateShop(result.shop); // same validation logic as a file import (G.28)
       await State.upsertShopTab(result.shop, {
         source: "session",
         sessionId: code,
@@ -290,13 +279,9 @@ const Regular = (() => {
     $("#uploadInput").on("change", function () { handleUpload(this.files); });
 
     $("#shopTabBar").on("click", ".tab-chip", function (e) {
-      if ($(e.target).is(".tab-hide-btn, .tab-close-btn")) return;
+      if ($(e.target).is(".tab-close-btn")) return;
       State.setActiveShopId($(this).data("shop-id"));
       render();
-    });
-    $("#shopTabBar").on("click", ".tab-hide-btn", function (e) {
-      e.stopPropagation();
-      hideTab($(this).closest(".tab-chip").data("shop-id"));
     });
     $("#shopTabBar").on("click", ".tab-close-btn", function (e) {
       e.stopPropagation();

@@ -6,15 +6,15 @@
 <link rel="stylesheet" href="css/tailwind-output.css" />
 <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="w-[420px] h-[600px] bg-beyond-parchment dark:bg-beyond-ink text-beyond-ink dark:text-beyond-parchment flex flex-col overflow-hidden">
+<body class="w-[420px] h-[600px] bg-beyond-parchment text-beyond-inkflex flex-col overflow-hidden">
 
   <!-- App shell -->
   <div id="app" class="flex flex-col h-full">
 
     <!-- Header -->
-    <header class="flex items-center justify-between px-3 py-2 border-b border-black/10 dark:border-white/10 bg-beyond-red text-beyond-parchment shrink-0">
+    <header class="flex items-center justify-between px-3 py-2 border-b border-black/10 bg-beyond-red text-beyond-parchment shrink-0">
       <div class="flex items-center gap-2">
-        <img src="icons/icon128.png" width="20" height="20" alt="" />
+        <img src="icons/icon48.png" alt="" width="20" height="20" />
         <span class="font-display font-bold tracking-wide text-sm">Shop Keeper</span>
       </div>
       <div class="flex items-center gap-1.5">
@@ -25,16 +25,16 @@
     </header>
 
     <!-- Primary nav (view switch) -->
-    <nav class="flex shrink-0 border-b border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 text-sm">
-      <button data-view="regular" class="nav-tab flex-1 py-2 font-semibold border-b-2 border-beyond-red text-beyond-red dark:text-beyond-gold dark:border-beyond-gold">Browse Shops</button>
-      <button data-view="creation" id="creationNavBtn" class="nav-tab flex-1 py-2 font-semibold border-b-2 border-transparent text-beyond-ink/60 dark:text-beyond-parchment/60 hidden">Create Shop</button>
+    <nav class="flex shrink-0 border-b border-black/10  bg-white/60 text-sm">
+      <button data-view="regular" class="nav-tab flex-1 py-2 font-semibold border-b-2 border-beyond-red text-beyond-red">Browse Shops</button>
+      <button data-view="creation" id="creationNavBtn" class="nav-tab flex-1 py-2 font-semibold border-b-2 border-transparent text-beyond-ink/60 hidden">Create Shop</button>
     </nav>
 
     <!-- ===================== REGULAR (PLAYER) VIEW ===================== -->
     <section id="view-regular" class="flex-1 flex flex-col overflow-hidden">
 
       <!-- Upload row -->
-      <div class="flex items-center gap-2 px-3 py-2 shrink-0 border-b border-black/5 dark:border-white/5">
+      <div class="flex items-center gap-2 px-3 py-2 shrink-0 border-b border-black/5">
         <label class="btn-secondary cursor-pointer !py-1 flex items-center gap-1">
           📂 Import Shop(s)
           <input type="file" id="uploadInput" accept="application/json" multiple class="hidden" />
@@ -42,7 +42,7 @@
       </div>
 
       <!-- Join Live Session row (J.38) -->
-      <div class="flex items-center gap-2 px-3 pb-2 shrink-0 border-b border-black/5 dark:border-white/5">
+      <div class="flex items-center gap-2 px-3 pb-2 shrink-0 border-b border-black/5">
         <input id="joinSessionCode" type="text" placeholder="Enter room code…" class="field-input flex-1" maxlength="8" />
         <button id="joinSessionBtn" class="btn-secondary !py-1">📡 Join</button>
       </div>
@@ -51,7 +51,7 @@
       <div id="shopTabBar" class="flex gap-1 px-3 pt-2 overflow-x-auto shrink-0" role="tablist"></div>
 
       <!-- Search/filter/sort for active shop -->
-      <div id="regularToolbar" class="hidden flex items-center gap-2 px-3 py-2 border-t border-b border-black/10 dark:border-white/10 shrink-0">
+      <div id="regularToolbar" class="hidden flex items-center gap-2 px-3 py-2 border-t border-b border-black/10 shrink-0">
         <input id="regularSearch" type="search" placeholder="Search items…" class="field-input flex-1" />
         <select id="regularRarityFilter" class="field-input w-28 shrink-0">
           <option value="">All rarities</option>
@@ -88,7 +88,7 @@
     <!-- ===================== CREATION VIEW (DM ONLY) ===================== -->
     <section id="view-creation" class="flex-1 flex-col overflow-hidden hidden">
 
-      <div class="px-3 py-2 border-b border-black/5 dark:border-white/5 shrink-0 space-y-2">
+      <div class="px-3 py-2 border-b border-black/5 shrink-0 space-y-2">
         <input id="creationTitleInput" type="text" placeholder="Shop title (e.g. Ye Olde Shoppe)" class="field-input font-display font-bold" />
         <div class="flex items-center gap-2">
           <button id="openItemPickerBtn" class="btn-primary">➕ Add from Catalog</button>
@@ -129,7 +129,7 @@
     </section>
 
     <!-- Disclaimer -->
-    <footer class="shrink-0 px-3 py-1.5 border-t border-black/10 dark:border-white/10 text-center">
+    <footer class="shrink-0 px-3 py-1.5 border-t border-black/10 text-center">
       <p class="text-[10px] leading-tight opacity-50">Unofficial fan-made tool. Not affiliated with, endorsed, or sponsored by D&amp;D Beyond, Wizards of the Coast, or Hasbro. SRD content used under CC-BY-4.0.</p>
     </footer>
   </div>

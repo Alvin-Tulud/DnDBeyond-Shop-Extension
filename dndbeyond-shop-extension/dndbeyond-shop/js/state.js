@@ -4,7 +4,7 @@
  * Holds: current shop draft (Creation Interface), loaded shop tabs
  * (Regular Interface, keyed by shop id) plus source/sessionId/
  * lastSyncedAt/sessionUpdatedAt for Live Share (see J.39), current user
- * role, UI prefs (theme), and hosted-session bookkeeping for the DM side
+ * role, and hosted-session bookkeeping for the DM side
  * of Live Share (one writeToken per shop the DM has gone live with). The
  * SRD catalog itself is intentionally NOT part of this persisted state
  * (see catalog.js / B.5).
@@ -17,7 +17,6 @@
 
 const STORAGE_KEYS = {
   ROLE: "shopkeeper_role", // "dm" | "user"
-  THEME: "shopkeeper_theme", // "light" | "dark"
   DRAFT: "shopkeeper_creation_draft", // in-progress Shop object
   TABS: "shopkeeper_loaded_shops", // { [shopId]: { shop, loadOrder, source, sessionId?, lastSyncedAt?, sessionUpdatedAt? } }
   HOSTED_SESSIONS: "shopkeeper_hosted_sessions" // { [shopId]: { sessionId, writeToken, updatedAt } } — DM-only
@@ -25,7 +24,6 @@ const STORAGE_KEYS = {
 
 const State = (() => {
   let role = "user";
-  let theme = "light";
   let draft = null; // current Creation Interface shop draft
   let tabs = {}; // shopId -> { shop, loadOrder, source, sessionId?, lastSyncedAt?, sessionUpdatedAt? }
   let hostedSessions = {}; // shopId -> { sessionId, writeToken, updatedAt } (DM side of Live Share)
@@ -41,11 +39,10 @@ const State = (() => {
 
   async function hydrate() {
     const stored = await storageGet([
-      STORAGE_KEYS.ROLE, STORAGE_KEYS.THEME, STORAGE_KEYS.DRAFT,
+      STORAGE_KEYS.ROLE, STORAGE_KEYS.DRAFT,
       STORAGE_KEYS.TABS, STORAGE_KEYS.HOSTED_SESSIONS
     ]);
     role = stored[STORAGE_KEYS.ROLE] || "user";
-    theme = stored[STORAGE_KEYS.THEME] || (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     draft = stored[STORAGE_KEYS.DRAFT] || createShop();
     tabs = stored[STORAGE_KEYS.TABS] || {};
     hostedSessions = stored[STORAGE_KEYS.HOSTED_SESSIONS] || {};
@@ -60,13 +57,6 @@ const State = (() => {
   async function setRole(newRole) {
     role = newRole;
     await storageSet({ [STORAGE_KEYS.ROLE]: role });
-  }
-
-  // ---- Theme ----
-  function getTheme() { return theme; }
-  async function setTheme(newTheme) {
-    theme = newTheme;
-    await storageSet({ [STORAGE_KEYS.THEME]: theme });
   }
 
   // ---- Creation draft ----
@@ -149,7 +139,6 @@ const State = (() => {
   return {
     hydrate,
     getRole, setRole,
-    getTheme, setTheme,
     getDraft, setDraft, resetDraft,
     getTabs, getSortedTabs,
     getActiveShopId, setActiveShopId,

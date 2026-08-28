@@ -1,12 +1,7 @@
 /**
- * Popup entry point. Wires the top-level chrome (nav, role toggle, theme
+ * Popup entry point. Wires the top-level chrome (nav, role toggle,
  * toggle) and boots the Creation / Regular interface modules.
  */
-
-function applyTheme(theme) {
-  $("html").toggleClass("dark", theme === "dark");
-  $("#themeIcon").text(theme === "dark" ? "☀️" : "🌙");
-}
 
 function switchView(view) {
   const isCreation = view === "creation";
@@ -18,8 +13,8 @@ function switchView(view) {
   $(".nav-tab").each(function () {
     const active = $(this).data("view") === view;
     $(this)
-      .toggleClass("border-beyond-red text-beyond-red dark:text-beyond-gold dark:border-beyond-gold", active)
-      .toggleClass("border-transparent text-beyond-ink/60 dark:text-beyond-parchment/60", !active);
+      .toggleClass("border-beyond-red text-beyond-red", active)
+      .toggleClass("border-transparent text-beyond-ink/60", !active);
   });
 
   if (isCreation) {
@@ -30,8 +25,11 @@ function switchView(view) {
 
 async function init() {
   await State.hydrate();
-  applyTheme(State.getTheme());
   Roles.applyRoleToUI();
+
+  // J.40: clear the "something updated" badge the background poller may
+  // have set — the player is looking now, so it's done its job.
+  chrome.action.setBadgeText({ text: "" });
 
   $("#roleToggleBtn").on("click", () => Roles.toggleRole());
 

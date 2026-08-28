@@ -46,8 +46,8 @@ const Creation = (() => {
     const costText = formatCost(item.cost) || "No cost set";
     const qtyText = item.quantity === null || item.quantity === undefined ? "—" : item.quantity;
     const sourceTag = item.source === "srd"
-      ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-beyond-gold/30 text-beyond-ink dark:text-beyond-gold font-semibold">SRD</span>`
-      : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 font-semibold">Custom</span>`;
+      ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-beyond-gold/30 text-beyond-ink font-semibold">SRD</span>`
+      : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-black/10 font-semibold">Custom</span>`;
     return `
       <div class="card p-2.5" data-item-id="${item.id}">
         <div class="flex items-start justify-between gap-2">
@@ -99,7 +99,7 @@ const Creation = (() => {
     results.slice(0, 200).forEach((item) => {
       const costText = formatCost(item.cost) || "—";
       $results.append(`
-        <button class="catalog-result-item w-full text-left card p-2 hover:border-beyond-red/50 dark:hover:border-beyond-gold/50" data-catalog-id="${item.catalogId}">
+        <button class="catalog-result-item w-full text-left card p-2 hover:border-beyond-red/50" data-catalog-id="${item.catalogId}">
           <div class="flex items-center justify-between gap-2">
             <span class="font-semibold text-sm">${UI.escapeHtml(item.name)}</span>
             <span class="text-[11px] opacity-60">${UI.escapeHtml(costText)}</span>
@@ -123,18 +123,11 @@ const Creation = (() => {
       source: "srd"
     });
     const d = draft();
-    if (!draft().items.some((i) => i.name === item.name)) {
-      console.log("Adding catalog item to draft:", item);
-      console.log(draft());
-      d.items.push(item);
-      d.updatedAt = new Date().toISOString();
-      await State.setDraft(d);
-      renderItemList();
-      UI.showToast(`${catalogItem.name} added to shop.`, "success");
-    }
-    else {
-      UI.showToast(`${catalogItem.name} is already in the shop.`, "error");
-    }
+    d.items.push(item);
+    d.updatedAt = new Date().toISOString();
+    await State.setDraft(d);
+    renderItemList();
+    UI.showToast(`${catalogItem.name} added to shop.`, "success");
   }
 
   // ---- C.10 / C.12: custom item form (also doubles as the edit-item form) ----
