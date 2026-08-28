@@ -99,8 +99,8 @@ const Session = (() => {
   }
 
   // ---- Active adapter — swap this line in Phase 3, nothing else needs to change ----
-  // const ACTIVE_ADAPTER = HttpRelayAdapter("https://your-relay.example.com/api");
-  const ACTIVE_ADAPTER = LocalMockRelayAdapter;
+  const ACTIVE_ADAPTER = HttpRelayAdapter("https://your-relay.example.com/api");
+  // const ACTIVE_ADAPTER = LocalMockRelayAdapter;
 
   // ---- Room code generation ----
   const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I ambiguity
