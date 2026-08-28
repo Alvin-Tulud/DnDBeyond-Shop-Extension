@@ -36,7 +36,7 @@
       <!-- Upload row -->
       <div class="flex items-center gap-2 px-3 py-2 shrink-0 border-b border-black/5">
         <label class="btn-secondary cursor-pointer !py-1 flex items-center gap-1">
-          📂 Import Shop(s)
+          Import Shop(s)
           <input type="file" id="uploadInput" accept="application/json" multiple class="hidden" />
         </label>
       </div>
@@ -44,7 +44,7 @@
       <!-- Join Live Session row (J.38) -->
       <div class="flex items-center gap-2 px-3 pb-2 shrink-0 border-b border-black/5">
         <input id="joinSessionCode" type="text" placeholder="Enter room code…" class="field-input flex-1" maxlength="8" />
-        <button id="joinSessionBtn" class="btn-secondary !py-1">📡 Join</button>
+        <button id="joinSessionBtn" class="btn-secondary !py-1">Join</button>
       </div>
 
       <!-- Tab bar -->
@@ -80,8 +80,7 @@
 
       <!-- Empty state -->
       <div id="regularEmptyState" class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-2 opacity-70">
-        <span class="text-4xl">📦</span>
-        <p id="regularEmptyText" class="text-sm font-medium">No shop loaded yet. Import a shop JSON file, or join a live session with a room code.</p>
+        <p id="regularEmptyText" class="text-sm font-medium">No shop loaded yet. Import a shop JSON file, or join a live share with a room code.</p>
       </div>
     </section>
 
@@ -91,7 +90,7 @@
       <div class="px-3 py-2 border-b border-black/5 shrink-0 space-y-2">
         <input id="creationTitleInput" type="text" placeholder="Shop title (e.g. Ye Olde Shoppe)" class="field-input font-display font-bold" />
         <div class="flex items-center gap-2">
-          <button id="openItemPickerBtn" class="btn-primary">➕ Add from Catalog</button>
+          <button id="openItemPickerBtn" class="btn-primary">+ Add from Catalog</button>
           <button id="openCustomItemBtn" class="btn-secondary">✎ Custom Item</button>
         </div>
         <div class="flex items-center gap-2">
@@ -104,18 +103,18 @@
 
         <!-- Live Share host controls (J.37) -->
         <div class="flex items-center gap-2">
-          <button id="goLiveBtn" class="btn-primary flex-1">📡 Go Live</button>
+          <button id="goLiveBtn" class="btn-primary flex-1">Start Live Sharing</button>
         </div>
         <div id="liveSessionPanel" class="hidden space-y-1.5">
           <div class="flex items-center gap-2">
             <span class="text-xs font-semibold opacity-70">Room code:</span>
             <span id="liveSessionCode" class="text-sm font-bold tracking-wide"></span>
-            <button id="copyRoomCodeBtn" class="btn-icon text-xs" title="Copy room code">📋</button>
+            <button id="copyRoomCodeBtn" class="font-semibold btn-icon text-xs opacity-70" title="Copy room code">Copy</button>
           </div>
           <p id="liveSessionMeta" class="text-[11px] opacity-60"></p>
           <div class="flex gap-2">
-            <button id="publishUpdateBtn" class="btn-secondary flex-1">⬆ Publish Update</button>
-            <button id="endLiveSessionBtn" class="btn-secondary flex-1">⏹ End Session</button>
+            <button id="publishUpdateBtn" class="btn-secondary flex-1">⬆ Send Update</button>
+            <button id="endLiveSessionBtn" class="btn-secondary flex-1">⏹ End Live Sharing</button>
           </div>
         </div>
       </div>
@@ -123,8 +122,7 @@
       <div id="creationItemList" class="flex-1 overflow-y-auto px-3 py-2 space-y-2"></div>
 
       <div id="creationEmptyState" class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-2 opacity-70">
-        <span class="text-4xl">🛒</span>
-        <p class="text-sm font-medium">No items yet. Add items from the SRD catalog or create a custom item.</p>
+        <p class="text-sm font-medium">No items yet. Add items from the item catalog or create a custom item.</p>
       </div>
     </section>
 
@@ -140,7 +138,7 @@
   <div id="itemPickerModal" class="modal-overlay hidden">
     <div class="modal-panel">
       <div class="flex items-center justify-between mb-2">
-        <h3 class="font-display font-bold">Add from SRD Catalog</h3>
+        <h3 class="font-display font-bold">Add from Item Catalog</h3>
         <button class="modal-close-btn" data-close="itemPickerModal">✕</button>
       </div>
       <div class="flex gap-2 mb-2">

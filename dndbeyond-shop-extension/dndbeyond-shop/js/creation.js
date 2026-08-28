@@ -60,8 +60,8 @@ const Creation = (() => {
             <p class="text-xs opacity-80 mt-0.5 line-clamp-2">${UI.escapeHtml(item.description || "")}</p>
           </div>
           <div class="flex flex-col gap-1 shrink-0">
-            <button class="item-edit-btn btn-icon text-xs" title="Edit item">✎</button>
-            <button class="item-remove-btn btn-icon text-xs" title="Remove item">🗑</button>
+            <button class="font-semibold item-edit-btn btn-icon text-xs" title="Edit item">Edit</button>
+            <button class="font-semibold item-remove-btn btn-icon text-xs" title="Remove item">Remove</button>
           </div>
         </div>
       </div>`;
@@ -123,11 +123,17 @@ const Creation = (() => {
       source: "srd"
     });
     const d = draft();
-    d.items.push(item);
-    d.updatedAt = new Date().toISOString();
-    await State.setDraft(d);
-    renderItemList();
-    UI.showToast(`${catalogItem.name} added to shop.`, "success");
+    if (draft().items.some((i) => i.name === item.name)) {
+      UI.showToast(`${catalogItem.name} is already in the shop.`, "error");
+      return;
+    }
+    else {
+      d.items.push(item);
+      d.updatedAt = new Date().toISOString();
+      await State.setDraft(d);
+      renderItemList();
+      UI.showToast(`${catalogItem.name} added to shop.`, "success");
+    }
   }
 
   // ---- C.10 / C.12: custom item form (also doubles as the edit-item form) ----

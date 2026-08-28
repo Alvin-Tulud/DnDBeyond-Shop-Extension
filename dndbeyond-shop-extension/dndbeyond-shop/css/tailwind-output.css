@@ -852,6 +852,10 @@ html, body {
   height: 5rem;
 }
 
+.h-\[800px\] {
+  height: 800px;
+}
+
 .w-28 {
   width: 7rem;
 }
