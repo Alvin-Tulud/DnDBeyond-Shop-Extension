@@ -1,9 +1,10 @@
 (DONE) fix darkmode for all dropdown lists (or just remove darkmode kinda unecessary)
 (Done) make it so add from srd catalog loads all items in for scrollable list
 - add from SRD Catalog > filter types
-rename all assets
+(IN PROGRESS) rename all assets
 (DONE) remove hidden shop as functionality is not as intended and is also kinda useless
 - (DONE) original function was for hidden / obscured items in a shop
 (DONE) - need to populate srd-items.json with more / all items (has 5e and 5.5e)
 (DONE) need real icons (ask joos or shaheel)
 tie the bundle export to a button as listed in README (known simplifications in this pass)
+add button to clear out entire shop

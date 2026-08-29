@@ -235,6 +235,25 @@ const Creation = (() => {
     UI.showToast(`${item.name} removed.`, "info");
   }
 
+  // ---- Clear-all-items handler: removes every item in the current editable
+  // shop draft, in one action, with confirmation (mirrors C.11's remove-item
+  // pattern, just applied to the whole list). DM-gated at the logic level. ----
+  async function clearAllItems() {
+    if (!Roles.requireDM("Clearing items")) return;
+    const d = draft();
+    if (d.items.length === 0) {
+      UI.showToast("This shop has no items to clear.", "info");
+      return;
+    }
+    const ok = await UI.confirm(`Remove all ${d.items.length} item${d.items.length === 1 ? "" : "s"} from "${d.title || "this shop"}"? This cannot be undone.`);
+    if (!ok) return;
+    d.items = [];
+    d.updatedAt = new Date().toISOString();
+    await State.setDraft(d);
+    renderItemList();
+    UI.showToast("All items cleared.", "info");
+  }
+
   // ---- C.14: export function ----
   async function exportShop() {
     if (!Roles.requireDM("Exporting a shop")) return;
@@ -389,6 +408,7 @@ const Creation = (() => {
       addCatalogItemToDraft($(this).data("catalog-id"));
     });
     $("#customItemForm").on("submit", submitCustomItemForm);
+    $("#clearAllItemsBtn").on("click", clearAllItems);
     $("#exportShopBtn").on("click", exportShop);
     $("#creationImportInput").on("change", function () { importForEditing(this.files); });
 
