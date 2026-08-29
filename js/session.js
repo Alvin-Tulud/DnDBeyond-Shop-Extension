@@ -102,7 +102,7 @@ const Session = (() => {
   const ACTIVE_ADAPTER = HttpRelayAdapter("https://dndbeyond-relay.alvintulud.workers.dev");
   // const ACTIVE_ADAPTER = LocalMockRelayAdapter;
 
-  // ---- Room code generation ----
+  // ---- Live Share code generation ----
   const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I ambiguity
   function generateSessionId(length = 6) {
     let code = "";
@@ -139,12 +139,12 @@ const Session = (() => {
     return { updatedAt };
   }
 
-  /** DM: stop hosting; the room code stops resolving for anyone still polling it. */
+  /** DM: stop hosting; the Live Share code stops resolving for anyone still polling it. */
   async function endSession(sessionId, writeToken) {
     await ACTIVE_ADAPTER.remove(sessionId, writeToken);
   }
 
-  /** Player: fetch the current state of a session by room code. Returns null if not found. */
+  /** Player: fetch the current state of a session by Live Share code. Returns null if not found. */
   async function fetchLatest(sessionId) {
     return ACTIVE_ADAPTER.get(sessionId);
   }

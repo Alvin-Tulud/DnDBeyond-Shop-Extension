@@ -200,7 +200,7 @@ const Regular = (() => {
     const entry = State.getTabs()[shopId];
     if (!entry) return;
     const message = entry.source === "session"
-      ? `Leave "${entry.shop.title}"? This removes it from your view and stops syncing — you'd need to rejoin with the room code to get it back.`
+      ? `Leave "${entry.shop.title}"? This removes it from your view and stops syncing — you'd need to rejoin with the live share code to get it back.`
       : `Close "${entry.shop.title}"? This removes it from your view and can't be undone — you'd need to re-import the file to get it back.`;
     const ok = await UI.confirm(message);
     if (!ok) return;
@@ -221,7 +221,7 @@ const Regular = (() => {
   async function joinSession() {
     const codeRaw = $("#joinSessionCode").val();
     const code = (codeRaw || "").trim().toUpperCase();
-    if (!code) { UI.showToast("Enter a room code first.", "error"); return; }
+    if (!code) { UI.showToast("Enter a Live Share code first.", "error"); return; }
 
     const $btn = $("#joinSessionBtn");
     UI.setLoading($btn, true, "Joining…");

@@ -26,8 +26,8 @@ const Roles = (() => {
 
   function applyRoleToUI() {
     const dm = isDM();
-    $("#roleLabel").text(dm ? "Dungeon Master" : "User");
-    $("#roleToggleBtn").attr("title", dm ? "Switch to User mode" : "Switch to Dungeon Master mode");
+    $("#roleLabel").text(dm ? "Dungeon Master" : "Player");
+    $("#roleToggleBtn").attr("title", dm ? "Switch to Player mode" : "Switch to Dungeon Master mode");
     $("#creationNavBtn").toggleClass("hidden", !dm);
     // If a non-DM somehow has the creation view active, bounce them to Browse Shops
     if (!dm && $("#view-creation").is(":visible")) {
@@ -39,7 +39,7 @@ const Roles = (() => {
     const newRole = isDM() ? "user" : "dm";
     await State.setRole(newRole);
     applyRoleToUI();
-    UI.showToast(newRole === "dm" ? "Dungeon Master mode enabled." : "Switched to User mode.", "info");
+    UI.showToast(newRole === "dm" ? "Switched to Dungeon Master mode." : "Switched to Player mode.", "info");
   }
 
   return { isDM, requireDM, applyRoleToUI, toggleRole };

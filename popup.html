@@ -19,7 +19,7 @@
       </div>
       <div class="flex items-center gap-1.5">
         <button id="roleToggleBtn" class="text-xs font-semibold px-2 py-1 rounded-md bg-white/15 hover:bg-white/25 transition-colors" title="Toggle Dungeon Master mode">
-          <span id="roleLabel">User</span>
+          <span id="roleLabel">Player</span>
         </button>
       </div>
     </header>
@@ -80,7 +80,7 @@
 
       <!-- Empty state -->
       <div id="regularEmptyState" class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-2 opacity-70">
-        <p id="regularEmptyText" class="text-sm font-medium">No shop loaded yet. Import a shop JSON file, or join a live share with a room code.</p>
+        <p id="regularEmptyText" class="text-sm font-medium">No shop loaded yet. Import a shop JSON file, or join a live share with a live share code.</p>
       </div>
     </section>
 
@@ -89,17 +89,15 @@
 
       <div class="px-3 py-2 border-b border-black/5 shrink-0 space-y-2">
         <input id="creationTitleInput" type="text" placeholder="Shop title (e.g. Ye Olde Shoppe)" class="field-input font-display font-bold" />
-        <div class="flex items-center gap-2">
-          <button id="openItemPickerBtn" class="btn-primary">+ Add Item</button>
-          <button id="openCustomItemBtn" class="btn-secondary">✎ Custom Item</button>
-        </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 justify-between">
+          <button id="openItemPickerBtn" class="btn-primary flex-1" title="Add an item from the catalog">+ Add Item</button>
+          <button id="openCustomItemBtn" class="btn-secondary flex-1" title="Create a custom item">✎ Custom Item</button>
           <button id="clearAllItemsBtn" class="btn-secondary flex-1" title="Remove every item from this shop">Clear All Items</button>
         </div>
         <div class="flex items-center gap-2">
           <button id="exportShopBtn" class="btn-secondary flex-1">⬆ Export as JSON</button>
           <label class="btn-secondary flex-1 text-center cursor-pointer">
-            ⬇ Import to Edit
+            ⬇ Import from JSON
             <input type="file" id="creationImportInput" accept="application/json" class="hidden" />
           </label>
         </div>
@@ -110,9 +108,9 @@
         </div>
         <div id="liveSessionPanel" class="hidden space-y-1.5">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold opacity-70">Room code:</span>
+            <span class="text-xs font-semibold opacity-70">Live Share code:</span>
             <span id="liveSessionCode" class="text-sm font-bold tracking-wide"></span>
-            <button id="copyRoomCodeBtn" class="font-semibold btn-icon text-xs opacity-70" title="Copy room code">Copy</button>
+            <button id="copyRoomCodeBtn" class="font-semibold btn-icon text-xs opacity-70" title="Copy Live Share code">Copy</button>
           </div>
           <p id="liveSessionMeta" class="text-[11px] opacity-60"></p>
           <div class="flex gap-2">

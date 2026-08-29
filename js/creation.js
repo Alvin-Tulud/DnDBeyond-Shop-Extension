@@ -338,7 +338,7 @@ const Creation = (() => {
       const { sessionId, writeToken, updatedAt } = await Session.hostShop(d);
       await State.setHostedSession(d.id, { sessionId, writeToken, updatedAt });
       refreshLiveSessionUI();
-      UI.showToast(`Live! Room code: ${sessionId}`, "success");
+      UI.showToast(`Live! Live Share code: ${sessionId}`, "success");
     } catch (e) {
       UI.showToast(e.message || "Couldn't start a live session.", "error");
     } finally {
@@ -374,7 +374,7 @@ const Creation = (() => {
     const d = draft();
     const session = State.getHostedSession(d.id);
     if (!session) return;
-    const ok = await UI.confirm(`End the live session (room code ${session.sessionId})? Players who already joined keep the last copy they synced, but won't receive further updates.`);
+    const ok = await UI.confirm(`End the live session (Live Share code: ${session.sessionId})? Players who already joined keep the last copy they synced, but won't receive further updates.`);
     if (!ok) return;
     try {
       await Session.endSession(session.sessionId, session.writeToken);
@@ -392,9 +392,9 @@ const Creation = (() => {
     if (!session) return;
     try {
       await navigator.clipboard.writeText(session.sessionId);
-      UI.showToast("Room code copied.", "success");
+      UI.showToast("Live Share code copied.", "success");
     } catch (e) {
-      UI.showToast(`Room code: ${session.sessionId}`, "info");
+      UI.showToast(`Live Share code: ${session.sessionId}`, "info");
     }
   }
 
