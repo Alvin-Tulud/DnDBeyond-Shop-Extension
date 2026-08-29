@@ -45,6 +45,7 @@ const Creation = (() => {
   function renderCreationItemRow(item) {
     const costText = formatCost(item.cost) || "No cost set";
     const qtyText = item.quantity === null || item.quantity === undefined ? "—" : item.quantity;
+    const rColor = rarityColor(item.rarity);
     const sourceTag = item.source === "srd"
       ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-beyond-gold/30 text-beyond-ink font-semibold">SRD</span>`
       : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-black/10 font-semibold">Custom</span>`;
@@ -53,10 +54,10 @@ const Creation = (() => {
         <div class="flex items-start justify-between gap-2">
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="font-semibold text-sm truncate">${UI.escapeHtml(item.name)}</span>
+              <span class="font-semibold text-sm truncate" style="color: ${rColor};">${UI.escapeHtml(item.name)}</span>
               ${sourceTag}
             </div>
-            <p class="text-[11px] opacity-60">${UI.escapeHtml(item.rarity)} · ${UI.escapeHtml(costText)} · Qty: ${UI.escapeHtml(String(qtyText))}</p>
+            <p class="text-[11px]"><span class="font-semibold" style="color: ${rColor};">${UI.escapeHtml(item.rarity)}</span> <span class="opacity-60">· ${UI.escapeHtml(costText)} · Qty: ${UI.escapeHtml(String(qtyText))}</span></p>
             <p class="text-xs opacity-80 mt-0.5 line-clamp-2">${UI.escapeHtml(item.description || "")}</p>
           </div>
           <div class="flex flex-col gap-1 shrink-0">
@@ -98,13 +99,14 @@ const Creation = (() => {
     $results.empty();
     results.slice(0, 200).forEach((item) => {
       const costText = formatCost(item.cost) || "—";
+      const rColor = rarityColor(item.rarity);
       $results.append(`
         <button class="catalog-result-item w-full text-left card p-2 hover:border-beyond-red/50" data-catalog-id="${item.catalogId}">
           <div class="flex items-center justify-between gap-2">
-            <span class="font-semibold text-sm">${UI.escapeHtml(item.name)}</span>
+            <span class="font-semibold text-sm" style="color: ${rColor};">${UI.escapeHtml(item.name)}</span>
             <span class="text-[11px] opacity-60">${UI.escapeHtml(costText)}</span>
           </div>
-          <p class="text-[11px] opacity-60">${UI.escapeHtml(item.type)} · ${UI.escapeHtml(item.rarity)}</p>
+          <p class="text-[11px]"><span class="opacity-60">${UI.escapeHtml(item.type)} · </span><span class="font-semibold" style="color: ${rColor};">${UI.escapeHtml(item.rarity)}</span></p>
         </button>
       `);
     });

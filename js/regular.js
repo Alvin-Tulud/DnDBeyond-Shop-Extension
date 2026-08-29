@@ -141,12 +141,13 @@ const Regular = (() => {
   function renderItemRow(item) {
     const costText = formatCost(item.cost) || "—";
     const qtyText = item.quantity === null || item.quantity === undefined ? "" : `<span class="text-[11px] opacity-60">Qty: ${item.quantity}</span>`;
+    const rColor = rarityColor(item.rarity);
     return `
       <div class="card p-2.5">
         <div class="flex items-start justify-between gap-2">
           <div class="min-w-0">
-            <span class="font-semibold text-sm">${UI.escapeHtml(item.name)}</span>
-            <p class="text-[11px] opacity-60">${UI.escapeHtml(item.rarity)} · ${UI.escapeHtml(costText)}</p>
+            <span class="font-semibold text-sm" style="color: ${rColor};">${UI.escapeHtml(item.name)}</span>
+            <p class="text-[11px]"><span class="font-semibold" style="color: ${rColor};">${UI.escapeHtml(item.rarity)}</span> <span class="opacity-60">· ${UI.escapeHtml(costText)}</span></p>
             <p class="text-xs opacity-80 mt-0.5">${UI.escapeHtml(item.description || "")}</p>
           </div>
           ${qtyText}
