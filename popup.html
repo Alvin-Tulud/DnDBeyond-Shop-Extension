@@ -43,8 +43,8 @@
 
       <!-- Join Live Session row (J.38) -->
       <div class="flex items-center gap-2 px-3 pb-2 shrink-0 border-b border-black/5">
-        <input id="joinSessionCode" type="text" placeholder="Enter room code…" class="field-input flex-1" maxlength="8" />
-        <button id="joinSessionBtn" class="btn-secondary !py-1">Join</button>
+        <input id="joinSessionCode" type="text" placeholder="Enter live share code…" class="field-input flex-1" maxlength="8" />
+        <button id="joinSessionBtn" class="btn-secondary !py-1">Join Live Share</button>
       </div>
 
       <!-- Tab bar -->
@@ -71,7 +71,7 @@
             <h2 id="regularShopTitle" class="font-display font-bold text-lg leading-tight"></h2>
             <p id="regularShopMeta" class="text-xs opacity-60"></p>
           </div>
-          <button id="refreshSessionBtn" class="btn-icon text-xs hidden shrink-0" title="Check for updates">🔄</button>
+          <button id="refreshSessionBtn" class="font-semibold btn-icon text-xs hidden shrink-0" title="Check for updates">Update</button>
         </div>
       </div>
 
@@ -90,13 +90,13 @@
       <div class="px-3 py-2 border-b border-black/5 shrink-0 space-y-2">
         <input id="creationTitleInput" type="text" placeholder="Shop title (e.g. Ye Olde Shoppe)" class="field-input font-display font-bold" />
         <div class="flex items-center gap-2">
-          <button id="openItemPickerBtn" class="btn-primary">+ Add from Catalog</button>
+          <button id="openItemPickerBtn" class="btn-primary">+ Add Item</button>
           <button id="openCustomItemBtn" class="btn-secondary">✎ Custom Item</button>
         </div>
         <div class="flex items-center gap-2">
-          <button id="exportShopBtn" class="btn-secondary flex-1">⬇ Export Shop JSON</button>
+          <button id="exportShopBtn" class="btn-secondary flex-1">⬆ Export as JSON</button>
           <label class="btn-secondary flex-1 text-center cursor-pointer">
-            ⬆ Import to Edit
+            ⬇ Import to Edit
             <input type="file" id="creationImportInput" accept="application/json" class="hidden" />
           </label>
         </div>

@@ -91,7 +91,7 @@ const Regular = (() => {
     withTitles.forEach((t) => {
       const active = t.shop.id === State.getActiveShopId();
       const liveMarker = t.source === "session"
-        ? `<span class="text-[10px]" title="Live synced">📡</span>`
+        ? `<span class="text-[10px]" title="Live synced">(Live)</span>`
         : "";
       const $tab = $(`
         <div class="tab-chip ${active ? "active" : ""}" data-shop-id="${t.shop.id}" role="tab" aria-selected="${active}">
