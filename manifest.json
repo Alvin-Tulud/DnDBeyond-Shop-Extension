@@ -4,7 +4,7 @@
   "short_name": "Shop Keeper",
   "version": "1.0.0",
   "description": "Build and browse tabletop shop lists. Unofficial fan tool with no affiliation to D&D Beyond, Wizards of the Coast, or Hasbro.",
-  "permissions": ["storage", "alarms"],
+  "permissions": ["storage"],
   "host_permissions": ["https://dndbeyond-relay.alvintulud.workers.dev/*"],
   "background": {
     "service_worker": "background.js"
