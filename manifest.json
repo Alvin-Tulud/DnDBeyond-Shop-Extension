@@ -3,7 +3,7 @@
   "name": "Tabletop Shop Keeper (Unofficial)",
   "short_name": "Shop Keeper",
   "version": "1.0.0",
-  "description": "Build and browse tabletop shop lists offline. Unofficial fan tool with no affiliation to D&D Beyond, Wizards of the Coast, or Hasbro.",
+  "description": "Build and browse tabletop shop lists. Unofficial fan tool with no affiliation to D&D Beyond, Wizards of the Coast, or Hasbro.",
   "permissions": ["storage", "alarms"],
   "host_permissions": ["https://dndbeyond-relay.alvintulud.workers.dev/*"],
   "background": {
