@@ -1,6 +1,6 @@
 {
   "name": "dndbeyond-shop-keeper",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Unofficial DnD Beyond shop-list Chrome extension. Not affiliated with D&D Beyond, Wizards of the Coast, or Hasbro.",
   "scripts": {

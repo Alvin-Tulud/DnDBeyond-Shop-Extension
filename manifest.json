@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tabletop Shop Keeper (Unofficial)",
   "short_name": "Shop Keeper",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Build and browse tabletop shop lists. Unofficial fan tool with no affiliation to D&D Beyond, Wizards of the Coast, or Hasbro.",
   "permissions": ["storage"],
   "host_permissions": ["https://dndbeyond-relay.alvintulud.workers.dev/*"],
