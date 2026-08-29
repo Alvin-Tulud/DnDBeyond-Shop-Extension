@@ -8,8 +8,7 @@ Tech Stack:
 \- JQuery  
 \- AJAX (used for local dataset load / future extensions only — see Catalog Data Access below)
 
-Style Guidelines:  
-\- option for light and dark mode  
+Style Guidelines: 
 \- similar style to dndbeyond website  
 \- exclaimer at the bottom that this extension has no affiliation with dndbeyond or other parties
 
