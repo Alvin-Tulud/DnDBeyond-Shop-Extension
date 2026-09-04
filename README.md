@@ -1,3 +1,5 @@
+Link to Chrome Extension Store: https://chromewebstore.google.com/detail/tabletop-shop-keeper-unof/dejilcamagdocimehngogfolgfopipbb?authuser=0&hl=en 
+
 # Shop Keeper — DnD Beyond Shop Chrome Extension
 
 An unofficial, fan-made Chrome extension for tabletop RPG groups. It lets a **Dungeon Master** build shop lists (using a bundled D&D 5e and 5.5e SRD item catalog or fully custom entries) and share them with **players**, who browse them read-only — with no purchasing system. Shops can be shared either as offline JSON files or via live sharing (a lightweight Cloudflare Worker relay), whichever fits your group.
